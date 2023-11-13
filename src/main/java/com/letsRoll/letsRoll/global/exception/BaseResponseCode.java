@@ -22,6 +22,15 @@ public enum BaseResponseCode {
     // user
     ALREADY_EXIST_USER("U0001", HttpStatus.CONFLICT, "이미 존재하는 USER입니다"),
 
+    // member
+    NOT_FOUND_MEMBER("M0001", HttpStatus.NOT_FOUND, "멤버를 찾을 수 없습니다."),
+
+    // goal
+    NOT_FOUND_GOAL("G0001", HttpStatus.NOT_FOUND, "Goal을 찾을 수 없습니다."),
+
+    // todo
+    NOT_FOUND_TODO("T0001", HttpStatus.NOT_FOUND, "Todo를 찾을 수 없습니다."),
+
     ;
 
     public final String code;

@@ -8,6 +8,7 @@ import lombok.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class TodoManager extends BaseEntity {
     @Id
     @Column(name = "todoManager_id")
