@@ -22,6 +22,8 @@ public enum BaseResponseCode {
     // user
     ALREADY_EXIST_USER("U0001", HttpStatus.CONFLICT, "이미 존재하는 USER입니다"),
 
+    // project
+    NOT_FOUND_PROJECT("P0001", HttpStatus.NOT_FOUND, "PROJECT를 찾을 수 없습니다."),
     ;
 
     public final String code;
