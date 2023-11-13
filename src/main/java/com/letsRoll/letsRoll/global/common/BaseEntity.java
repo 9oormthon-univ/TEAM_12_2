@@ -1,4 +1,4 @@
-package com.letsRoll.letsRoll.entity;
+package com.letsRoll.letsRoll.global.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

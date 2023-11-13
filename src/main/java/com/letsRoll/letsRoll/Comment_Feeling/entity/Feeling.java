@@ -1,8 +1,8 @@
-package com.letsRoll.letsRoll.entity.Comment_Feeling;
+package com.letsRoll.letsRoll.Comment_Feeling.entity;
 
 
-import com.letsRoll.letsRoll.entity.BaseEntity;
-import com.letsRoll.letsRoll.entity.Project.Member;
+import com.letsRoll.letsRoll.global.common.BaseEntity;
+import com.letsRoll.letsRoll.Member.entity.Member;
 import com.letsRoll.letsRoll.global.enums.Emoji;
 import jakarta.persistence.*;
 import lombok.*;

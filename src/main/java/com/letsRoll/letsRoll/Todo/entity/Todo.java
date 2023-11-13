@@ -1,4 +1,4 @@
-package com.letsRoll.letsRoll.entity.Todo;
+package com.letsRoll.letsRoll.Todo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

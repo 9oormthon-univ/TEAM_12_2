@@ -1,7 +1,7 @@
-package com.letsRoll.letsRoll.entity.Project;
+package com.letsRoll.letsRoll.Project.entity;
 
-import com.letsRoll.letsRoll_server.entity.BaseEntity;
-import com.letsRoll.letsRoll_server.entity.Global.Mode;
+import com.letsRoll.letsRoll.global.common.BaseEntity;
+import com.letsRoll.letsRoll.global.enums.Mode;
 import jakarta.persistence.*;
 import lombok.*;
 

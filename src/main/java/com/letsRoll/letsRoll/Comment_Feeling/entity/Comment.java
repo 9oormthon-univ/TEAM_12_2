@@ -1,9 +1,9 @@
-package com.letsRoll.letsRoll.entity.Comment_Feeling;
+package com.letsRoll.letsRoll.Comment_Feeling.entity;
 
-import com.letsRoll.letsRoll.entity.BaseEntity;
-import com.letsRoll.letsRoll.entity.Goal.Goal;
-import com.letsRoll.letsRoll.entity.Project.Member;
-import com.letsRoll.letsRoll.entity.Todo.Todo;
+import com.letsRoll.letsRoll.global.common.BaseEntity;
+import com.letsRoll.letsRoll.Goal.entity.Goal;
+import com.letsRoll.letsRoll.Member.entity.Member;
+import com.letsRoll.letsRoll.Todo.entity.Todo;
 import jakarta.persistence.*;
 import lombok.*;
 import org.yaml.snakeyaml.comments.CommentType;

@@ -1,4 +1,4 @@
-package com.letsRoll.letsRoll_server.global.enums;
+package com.letsRoll.letsRoll.global.enums;
 
 public enum Emoji {
     HEART, THUMBSUP, HAPPY, SAD, CHECK

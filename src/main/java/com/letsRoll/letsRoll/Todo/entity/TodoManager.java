@@ -1,5 +1,7 @@
-package com.letsRoll.letsRoll.entity.Todo;
+package com.letsRoll.letsRoll.Todo.entity;
 
+import com.letsRoll.letsRoll.Member.entity.Member;
+import com.letsRoll.letsRoll.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +17,7 @@ public class TodoManager extends BaseEntity {
     @NonNull
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member  member;
+    private Member member;
 
     @Builder
     public TodoManager(@NonNull Member member) {

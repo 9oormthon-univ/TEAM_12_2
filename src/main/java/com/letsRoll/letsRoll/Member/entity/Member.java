@@ -1,6 +1,7 @@
-package com.letsRoll.letsRoll.entity.Project;
+package com.letsRoll.letsRoll.Member.entity;
 
-import com.letsRoll.letsRoll.entity.BaseEntity;
+import com.letsRoll.letsRoll.Project.entity.Project;
+import com.letsRoll.letsRoll.global.common.BaseEntity;
 import com.letsRoll.letsRoll.User.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
