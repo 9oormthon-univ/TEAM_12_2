@@ -1,5 +1,6 @@
 package com.letsRoll.letsRoll.Goal.controller;
 
+import com.letsRoll.letsRoll.Goal.dto.GoalDto;
 import com.letsRoll.letsRoll.Goal.dto.req.GoalAddReq;
 import com.letsRoll.letsRoll.Goal.service.GoalService;
 import com.letsRoll.letsRoll.global.common.BaseResponse;
@@ -19,6 +20,12 @@ public class GoalController {
         goalService.addGoal(projectId, goalAddReq);
         return new BaseResponse<>(BaseResponseCode.SUCCESS);
     }
+    @GetMapping("/{goalId}")
+    public BaseResponse<GoalDto> getGoalDetails(@PathVariable Long goalId) {
+        GoalDto goalDetails = goalService.getGoalDetails(goalId);
+        return new BaseResponse<>(goalDetails);
+    }
+
 
 
 }

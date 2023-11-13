@@ -24,6 +24,9 @@ public enum BaseResponseCode {
 
     // project
     NOT_FOUND_PROJECT("P0001", HttpStatus.NOT_FOUND, "PROJECT를 찾을 수 없습니다."),
+
+    // goal
+    NOT_FOUND_GOAL("G0001", HttpStatus.NOT_FOUND, "GOAL을 찾을 수 없습니다."),
     ;
 
     public final String code;
