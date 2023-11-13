@@ -1,5 +1,7 @@
 package com.letsRoll.letsRoll.Todo.entity;
 
+import com.letsRoll.letsRoll.Goal.entity.Goal;
+import com.letsRoll.letsRoll.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
