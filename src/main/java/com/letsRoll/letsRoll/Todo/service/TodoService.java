@@ -6,6 +6,7 @@ import com.letsRoll.letsRoll.Member.entity.Member;
 import com.letsRoll.letsRoll.Member.repository.MemberRepository;
 import com.letsRoll.letsRoll.Todo.dto.TodoAssembler;
 import com.letsRoll.letsRoll.Todo.dto.req.AddTodoReqDto;
+import com.letsRoll.letsRoll.Todo.dto.res.MyTodoResDto;
 import com.letsRoll.letsRoll.Todo.dto.res.TodoListResDto;
 import com.letsRoll.letsRoll.Todo.entity.Todo;
 import com.letsRoll.letsRoll.Todo.entity.TodoEndManager;
@@ -91,6 +92,25 @@ public class TodoService {
         }
         todoRepository.save(todo);
     }
+
+    public Boolean checkOverdueTodo() {
+        List<Todo> todoList = todoRepository.findTodosByIsCompleteIsFalseAndEndDateLessThan(LocalDate.now());
+        return !todoList.isEmpty();
+    }
+
+    public List<MyTodoResDto> getMyTodo(Long memberId) {
+        Member member = getMember(memberId);
+        TodoManager todoManager = todoManagerRepository.findByMember(member)
+                .orElseThrow(()->new BaseException(BaseResponseCode.NOT_FOUND_TODOMANAGER));
+        List<Todo> todoList = todoRepository.findTodosByTodoManagerOrderByCreatedDate(todoManager);
+
+        List<MyTodoResDto> myTodoResDtoList = new ArrayList<>();
+        for (Todo todo : todoList) {
+            myTodoResDtoList.add(todoAssembler.toMyTodoResDtoEntity(todo));
+        }
+        return myTodoResDtoList;
+    }
+
     public Goal getGoal(Long goalId) {
         return goalRepository.findGoalById(goalId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_GOAL));

@@ -1,6 +1,7 @@
 package com.letsRoll.letsRoll.Todo.controller;
 
 import com.letsRoll.letsRoll.Todo.dto.req.AddTodoReqDto;
+import com.letsRoll.letsRoll.Todo.dto.res.MyTodoResDto;
 import com.letsRoll.letsRoll.Todo.dto.res.TodoListResDto;
 import com.letsRoll.letsRoll.Todo.service.TodoService;
 import com.letsRoll.letsRoll.global.common.BaseResponse;
@@ -13,10 +14,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/todos")
+@RequestMapping(value = "/api/todos")
 @RequiredArgsConstructor
 public class TodoController {
     private final TodoService todoService;
+
     @PostMapping
     public BaseResponse<Void> addTodo(
             @RequestBody @Valid AddTodoReqDto addTodoReqDto) {
@@ -39,5 +41,15 @@ public class TodoController {
     public BaseResponse<Void> changeTodoComplete(@RequestParam long todoId, @RequestParam long memberId) {
         todoService.changeTodoComplete(todoId, memberId);
         return new BaseResponse<>(BaseResponseCode.SUCCESS);
+    }
+
+    @GetMapping("/is-overdue")
+    public BaseResponse<Boolean> checkOverdueTodo() {
+        return new BaseResponse<>(todoService.checkOverdueTodo());
+    }
+
+    @GetMapping("/{memberId}")
+    public BaseResponse<List<MyTodoResDto>> getMyTodo(@PathVariable Long memberId) {
+        return new BaseResponse<>(todoService.getMyTodo(memberId));
     }
 }

@@ -2,6 +2,7 @@ package com.letsRoll.letsRoll.Todo.dto;
 
 import com.letsRoll.letsRoll.Goal.entity.Goal;
 import com.letsRoll.letsRoll.Member.entity.Member;
+import com.letsRoll.letsRoll.Todo.dto.res.MyTodoResDto;
 import com.letsRoll.letsRoll.Todo.dto.res.TodoListResDto;
 import com.letsRoll.letsRoll.Todo.dto.res.TodoResDto;
 import com.letsRoll.letsRoll.Todo.entity.Todo;
@@ -31,8 +32,8 @@ public class TodoAssembler {
                 .goalId(todo.getGoal().getId())
                 .content(todo.getContent())
                 .endDate(todo.getEndDate())
-                .managerId(todo.getTodoManager().getId())
-                .endManagerId(todo.getTodoEndManager().getId())
+                .managerId(todo.getTodoManager().getMember().getId())
+                .endManagerId(todo.getTodoEndManager().getMember().getId())
                 .build();
     }
 
@@ -50,6 +51,18 @@ public class TodoAssembler {
     public TodoListResDto toDateTodoListResDtoEntity(Todo todo) {
         return TodoListResDto.builder()
                 .groupId(todo.getGoal().getId())
+                .goalContent(todo.getGoal().getContent())
+                .todoId(todo.getId())
+                .todoContent(todo.getContent())
+                .todoManagerId(todo.getTodoManager().getMember().getId())
+                .todoManagerNickName(todo.getTodoManager().getMember().getNickname())
+                .isComplete(todo.getIsComplete())
+                .build();
+    }
+
+    public MyTodoResDto toMyTodoResDtoEntity(Todo todo) {
+        return MyTodoResDto.builder()
+                .goalId(todo.getGoal().getId())
                 .goalContent(todo.getGoal().getContent())
                 .todoId(todo.getId())
                 .todoContent(todo.getContent())
