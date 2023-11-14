@@ -6,12 +6,16 @@ import com.letsRoll.letsRoll.global.common.BaseEntity;
 import com.letsRoll.letsRoll.global.enums.Mode;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Getter
+@DynamicUpdate
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Project extends BaseEntity {
     @Id

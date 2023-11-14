@@ -7,9 +7,13 @@ import com.letsRoll.letsRoll.Todo.entity.Todo;
 import com.letsRoll.letsRoll.global.enums.CommentType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
+@DynamicUpdate
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseEntity {
     @Id
