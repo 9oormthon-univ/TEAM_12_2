@@ -1,4 +1,4 @@
-package com.letsRoll.letsRoll.Comment_Feeling.dto;
+package com.letsRoll.letsRoll.Comment_Feeling.dto.res;
 
 import lombok.Builder;
 import lombok.Getter;
