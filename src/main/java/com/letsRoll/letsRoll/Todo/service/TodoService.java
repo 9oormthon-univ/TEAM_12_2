@@ -112,7 +112,7 @@ public class TodoService {
     }
 
     public Goal getGoal(Long goalId) {
-        return goalRepository.findGoalById(goalId)
+        return goalRepository.findById(goalId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_GOAL));
     }
 

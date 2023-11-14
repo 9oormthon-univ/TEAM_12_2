@@ -21,12 +21,17 @@ public enum BaseResponseCode {
 
     // user
     ALREADY_EXIST_USER("U0001", HttpStatus.CONFLICT, "이미 존재하는 USER입니다"),
+    WRONG_PASSWORD("U0002", HttpStatus.BAD_REQUEST, "비밀번호가 틀렸습니다."),
 
     // member
-    NOT_FOUND_MEMBER("M0001", HttpStatus.NOT_FOUND, "멤버를 찾을 수 없습니다."),
+    NOT_FOUND_MEMBER("M0001", HttpStatus.NOT_FOUND, "MEMBER를 찾을 수 없습니다."),
+
+    // project
+    NOT_FOUND_PROJECT("P0001", HttpStatus.NOT_FOUND, "PROJECT를 찾을 수 없습니다."),
+    WRONG_PROJECT_PASSWORD("P0002", HttpStatus.BAD_REQUEST, "PROJECT 비밀번호가 틀렸습니다."),
 
     // goal
-    NOT_FOUND_GOAL("G0001", HttpStatus.NOT_FOUND, "Goal을 찾을 수 없습니다."),
+    NOT_FOUND_GOAL("G0001", HttpStatus.NOT_FOUND, "GOAL을 찾을 수 없습니다."),
 
     // todo
     NOT_FOUND_TODO("T0001", HttpStatus.NOT_FOUND, "Todo를 찾을 수 없습니다."),
