@@ -31,7 +31,8 @@ public class GoalAgree extends BaseEntity {
     private Boolean memberCheck = false;
 
     @Builder
-    public GoalAgree(@NonNull Goal goal) {
+    public GoalAgree(@NonNull Goal goal, @NonNull Member member) {
         this.goal = goal;
+        this.member = member;
     }
 }
