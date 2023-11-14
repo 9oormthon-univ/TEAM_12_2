@@ -5,9 +5,13 @@ import com.letsRoll.letsRoll.global.common.BaseEntity;
 import com.letsRoll.letsRoll.Member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
+@DynamicUpdate
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TodoEndManager extends BaseEntity {
     @Id

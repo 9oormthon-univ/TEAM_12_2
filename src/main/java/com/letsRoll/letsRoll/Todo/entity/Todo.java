@@ -4,11 +4,15 @@ import com.letsRoll.letsRoll.Goal.entity.Goal;
 import com.letsRoll.letsRoll.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDate;
 
 @Entity
 @Getter
+@DynamicUpdate
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Todo extends BaseEntity {
     @Id
