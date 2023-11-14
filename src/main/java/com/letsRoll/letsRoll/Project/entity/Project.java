@@ -1,6 +1,7 @@
 package com.letsRoll.letsRoll.Project.entity;
 
 import com.letsRoll.letsRoll.Goal.entity.Goal;
+import com.letsRoll.letsRoll.Member.entity.Member;
 import com.letsRoll.letsRoll.global.common.BaseEntity;
 import com.letsRoll.letsRoll.global.enums.Mode;
 import jakarta.persistence.*;
@@ -43,6 +44,8 @@ public class Project extends BaseEntity {
     @OneToMany(mappedBy = "project")
     private List<Goal> goals;
 
+    @OneToMany(mappedBy = "project")
+    private List<Member> members;
 
     @Builder
     public Project(@NonNull String title, String description, @NonNull String password, @NonNull Mode mode, @NonNull LocalDate startDate, @NonNull LocalDate endDate) {

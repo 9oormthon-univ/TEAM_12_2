@@ -2,6 +2,7 @@ package com.letsRoll.letsRoll.Project.controller;
 
 import com.letsRoll.letsRoll.Goal.dto.GoalDto;
 import com.letsRoll.letsRoll.Goal.entity.Goal;
+import com.letsRoll.letsRoll.Member.dto.req.MemberAddReq;
 import com.letsRoll.letsRoll.Project.dto.req.ProjectStartReq;
 import com.letsRoll.letsRoll.Project.service.ProjectService;
 import com.letsRoll.letsRoll.global.common.BaseResponse;
@@ -28,5 +29,11 @@ public class ProjectController {
     public BaseResponse<List<GoalDto>> getGoalsForProject(@PathVariable Long projectId) {
         List<GoalDto> goals = projectService.getGoalsForProject(projectId);
         return new BaseResponse<>(goals);
+    }
+
+    @PostMapping("/{projectId}/members")
+    public BaseResponse<Void> addMemberToProject(@PathVariable Long projectId, @Valid @RequestBody MemberAddReq memberAddReq) {
+        projectService.addMemberToProject(projectId, memberAddReq);
+        return new BaseResponse<>(BaseResponseCode.SUCCESS);
     }
 }
