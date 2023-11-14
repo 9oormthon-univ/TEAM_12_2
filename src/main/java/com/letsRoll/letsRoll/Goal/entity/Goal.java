@@ -23,6 +23,9 @@ public class Goal extends BaseEntity {
     private Project project;
 
     @NonNull
+    private String title;
+
+    @NonNull
     private String content;
 
     @NonNull
@@ -40,8 +43,9 @@ public class Goal extends BaseEntity {
     private Boolean isComplete = false;
 
     @Builder
-    public Goal(@NonNull Project project, @NonNull String content, @NonNull LocalDate startDate, @NonNull LocalDate endDate) {
+    public Goal(@NonNull Project project, @NonNull String title ,@NonNull String content, @NonNull LocalDate startDate, @NonNull LocalDate endDate) {
         this.project = project;
+        this.title = title;
         this.content = content;
         this.startDate = startDate;
         this.endDate = endDate;
