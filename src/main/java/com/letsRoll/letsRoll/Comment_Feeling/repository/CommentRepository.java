@@ -11,6 +11,6 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findAllByGoalAndTodoAndType(Goal goal, Todo todo, CommentType commentType);
+    List<Comment> findAllByGoalAndTodoAndTypeOrderByCreatedDateAsc(Goal goal, Todo todo, CommentType commentType);
 
 }

@@ -50,7 +50,7 @@ public class CommentService {
     }
     public TodoCommentResDto getTodoComment(Long todoId) {
         Todo todo = getTodo(todoId);
-        List<Comment> commentList = commentRepository.findAllByGoalAndTodoAndType(todo.getGoal(), todo, CommentType.TODO);
+        List<Comment> commentList = commentRepository.findAllByGoalAndTodoAndTypeOrderByCreatedDateAsc(todo.getGoal(), todo, CommentType.TODO);
         List<CommentInfoDto> commentDtoList = new ArrayList<>();
         for (Comment comment : commentList) {
             List<Feeling> feelingList = feelingRepository.findAllByComment(comment);

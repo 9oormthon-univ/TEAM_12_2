@@ -20,7 +20,7 @@ public class CommentController {
         return new BaseResponse<>(BaseResponseCode.SUCCESS);
     }
 
-    @GetMapping("/todo/{todoId}/comment")
+    @GetMapping("/todos/{todoId}/comment")
     public BaseResponse<TodoCommentResDto> getTodoComment(@PathVariable Long todoId) {
         return new BaseResponse<>(commentService.getTodoComment(todoId));
     }
