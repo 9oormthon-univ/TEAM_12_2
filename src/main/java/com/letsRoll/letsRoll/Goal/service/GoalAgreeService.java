@@ -22,9 +22,9 @@ public class GoalAgreeService {
         Goal goal = goalRepository.findById(goalId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_GOAL));
 
-        Long memberId = 2l; // 임시 member 값
+        Long memberId = 2L; // 임시 member 값
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_MEMBER));
 
         // 해당 멤버에 대한 GoalAgree 엔티티 조회, 없으면 생성함(추후 멤버 추가됐을 때)
         GoalAgree goalAgree = goalAgreeRepository.findByGoalAndMember(goal, member)

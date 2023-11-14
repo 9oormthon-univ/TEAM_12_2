@@ -28,6 +28,7 @@ public class Todo extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "todoEndManager_id")
+    @Setter
     private TodoEndManager todoEndManager;
 
     @NonNull
