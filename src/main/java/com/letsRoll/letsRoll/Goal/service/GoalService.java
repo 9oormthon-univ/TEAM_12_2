@@ -3,7 +3,10 @@ package com.letsRoll.letsRoll.Goal.service;
 import com.letsRoll.letsRoll.Goal.dto.GoalDto;
 import com.letsRoll.letsRoll.Goal.dto.req.GoalAddReq;
 import com.letsRoll.letsRoll.Goal.entity.Goal;
+import com.letsRoll.letsRoll.Goal.entity.GoalAgree;
+import com.letsRoll.letsRoll.Goal.repository.GoalAgreeRepository;
 import com.letsRoll.letsRoll.Goal.repository.GoalRepository;
+import com.letsRoll.letsRoll.Member.entity.Member;
 import com.letsRoll.letsRoll.Project.entity.Project;
 import com.letsRoll.letsRoll.Project.repository.ProjectRepository;
 import com.letsRoll.letsRoll.global.exception.BaseException;
@@ -18,6 +21,7 @@ import java.time.LocalDate;
 public class GoalService {
     private final GoalRepository goalRepository;
     private final ProjectRepository projectRepository;
+    private final GoalAgreeRepository goalAgreeRepository;
 
     public void addGoal(Long projectId, GoalAddReq goalAddReq) {
 
@@ -39,8 +43,16 @@ public class GoalService {
                 .build();
 
         goalRepository.save(goal);
-        project.getGoals().add(goal);
-        projectRepository.save(project);
+
+        for (Member member : project.getMembers()) {
+            // GoalAgree 정보 저장
+            GoalAgree goalAgree = GoalAgree.builder()
+                    .goal(goal)
+                    .member(member)  // 멤버 정보 주입
+                    .build();
+
+            goalAgreeRepository.save(goalAgree);
+        }
 
     }
 
