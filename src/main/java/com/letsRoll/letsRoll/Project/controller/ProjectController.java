@@ -2,6 +2,9 @@ package com.letsRoll.letsRoll.Project.controller;
 
 import com.letsRoll.letsRoll.Goal.dto.res.GoalResDto;
 import com.letsRoll.letsRoll.Member.dto.req.MemberAddReq;
+import com.letsRoll.letsRoll.Memoir.dto.req.MemoirAddReq;
+
+import com.letsRoll.letsRoll.Memoir.service.MemoirService;
 import com.letsRoll.letsRoll.Project.dto.req.ProjectStartReq;
 import com.letsRoll.letsRoll.Project.dto.res.ProjectResDto;
 import com.letsRoll.letsRoll.Project.entity.Project;
@@ -24,6 +27,7 @@ import java.util.List;
 public class ProjectController {
     private final ProjectService projectService;
     private final ProjectRepository projectRepository;
+    private final MemoirService memoirService;
 
     @PostMapping //프로젝트 등록
     public BaseResponse<Void> startProject(@RequestBody @Valid ProjectStartReq projectStartReq) {
@@ -51,4 +55,17 @@ public class ProjectController {
         projectService.addMemberToProject(projectId, memberAddReq);
         return new BaseResponse<>(BaseResponseCode.SUCCESS);
     }
+
+    @PostMapping("/{projectId}/complete")
+    public BaseResponse<Void> finishProject(@PathVariable Long projectId) {
+        projectService.completeProject(projectId);
+        return new BaseResponse<>(BaseResponseCode.SUCCESS);
+    }
+
+    @PostMapping("/{projectId}/memoirs")
+    public BaseResponse<Void> addMemoir(@PathVariable Long projectId, @Valid @RequestBody MemoirAddReq addMemoirReq) {
+        projectService.addMemoir(projectId, addMemoirReq);
+        return new BaseResponse<>(BaseResponseCode.SUCCESS);
+    }
+
 }
