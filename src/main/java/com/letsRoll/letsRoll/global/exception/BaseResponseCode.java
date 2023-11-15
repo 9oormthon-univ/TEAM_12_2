@@ -39,9 +39,15 @@ public enum BaseResponseCode {
     // todoManager
     NOT_FOUND_TODOMANAGER("TM0001", HttpStatus.NOT_FOUND, "TodoManager를 찾을 수 없습니다"),
 
+
     // memoir
     ALREADY_WRITTEN_MEMOIR("M0001", HttpStatus.BAD_REQUEST, "이미 회고를 작성했습니다."),
     NOT_FOUND_MEMOIR("M0002", HttpStatus.NOT_FOUND, "회고를 찾을 수 없습니다."),
+
+    // comment
+    NOT_FOUND_COMMENT("C0001", HttpStatus.NOT_FOUND, "Comment를 찾을 수 없습니다"),
+
+
     ;
 
     public final String code;

@@ -1,7 +1,10 @@
 package com.letsRoll.letsRoll.Comment_Feeling.service;
 
 import com.letsRoll.letsRoll.Comment_Feeling.dto.CommentAssembler;
+import com.letsRoll.letsRoll.Comment_Feeling.dto.FeelingAssembler;
 import com.letsRoll.letsRoll.Comment_Feeling.dto.req.CommentReqDto;
+import com.letsRoll.letsRoll.Comment_Feeling.dto.req.GoalFeelingReqDto;
+import com.letsRoll.letsRoll.Comment_Feeling.dto.req.TodoFeelingReqDto;
 import com.letsRoll.letsRoll.Comment_Feeling.dto.res.CommentInfoDto;
 import com.letsRoll.letsRoll.Comment_Feeling.dto.res.TodoCommentResDto;
 import com.letsRoll.letsRoll.Comment_Feeling.entity.Comment;
@@ -15,6 +18,7 @@ import com.letsRoll.letsRoll.Member.repository.MemberRepository;
 import com.letsRoll.letsRoll.Todo.entity.Todo;
 import com.letsRoll.letsRoll.Todo.repository.TodoRepository;
 import com.letsRoll.letsRoll.global.enums.CommentType;
+import com.letsRoll.letsRoll.global.enums.Emoji;
 import com.letsRoll.letsRoll.global.exception.BaseException;
 import com.letsRoll.letsRoll.global.exception.BaseResponseCode;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +37,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final TodoRepository todoRepository;
     private final FeelingRepository feelingRepository;
-
+    private final FeelingAssembler feelingAssembler;
 
     public void addComment(CommentReqDto commentReqDto, String type) {
         Goal goal = goalRepository.findGoalByIdAndIsComplete(commentReqDto.getGoalId(), false)
@@ -64,6 +69,38 @@ public class CommentService {
         return commentAssembler.toTodoCommentResDtoEntity(todo, commentDtoList);
     }
 
+    public void addGoalCommentFeeling(Long goalId, Long commentId, GoalFeelingReqDto goalFeelingReqDto) {
+        Goal goal = getGoal(goalId);
+        Comment comment = commentRepository.findCommentByIdAndGoalAndType(commentId, goal, CommentType.GOAL)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_COMMENT));
+        Member member = getMember(goalFeelingReqDto.getMemberId());
+        Emoji emoji = isEmoji(goalFeelingReqDto.getEmoji());
+        checkAlreadyExistFeeling(comment, member, emoji);
+    }
+
+    public void addTodoCommentFeeling(Long todoId, Long commentId, TodoFeelingReqDto todoFeelingReqDto) {
+        Todo todo = getTodo(todoId);
+        Comment comment = commentRepository.findCommentByIdAndTodoAndType(commentId, todo, CommentType.TODO)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_COMMENT));
+        Member member = getMember(todoFeelingReqDto.getMemberId());
+        checkAlreadyExistFeeling(comment, member, Emoji.HEART);
+    }
+
+    public void checkAlreadyExistFeeling(Comment comment, Member member, Emoji emoji) {
+        Optional<Feeling> optionalFeeling = feelingRepository.findFeelingByCommentAndMember(comment, member);
+        if (optionalFeeling.isPresent()) {
+            Feeling feeling = optionalFeeling.get();
+            if (feeling.getEmoji().equals(emoji)) {
+                feelingRepository.delete(feeling);
+            } else {
+                feeling.setEmoji(emoji);
+                feelingRepository.save(feeling);
+            }
+        } else {
+            feelingRepository.save(feelingAssembler.toFeelingEntity(comment, member, emoji));
+        }
+    }
+
     public Goal getGoal(Long goalId) {
         return goalRepository.findById(goalId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_GOAL));
@@ -77,5 +114,29 @@ public class CommentService {
     public Member getMember(Long memberId) {
         return memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_MEMBER));
+    }
+
+    public Emoji isEmoji(String emoji) {
+        if (emoji==null) {
+            throw new BaseException(BaseResponseCode.CONTENT_NULL);
+        }
+        switch (emoji) {
+            case "HEART" -> {
+                return Emoji.HEART;
+            }
+            case "THUMBSUP" -> {
+                return Emoji.THUMBSUP;
+            }
+            case "HAPPY" -> {
+                return Emoji.HAPPY;
+            }
+            case "SAD" -> {
+                return Emoji.SAD;
+            }
+            case "CHECK" -> {
+                return Emoji.CHECK;
+            }
+            default -> throw new BaseException(BaseResponseCode.BAD_REQUEST);
+        }
     }
 }
