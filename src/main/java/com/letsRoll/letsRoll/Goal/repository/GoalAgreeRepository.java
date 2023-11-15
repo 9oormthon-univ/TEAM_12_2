@@ -9,4 +9,6 @@ import java.util.Optional;
 
 public interface GoalAgreeRepository extends JpaRepository<GoalAgree, Long>{
     Optional<GoalAgree> findByGoalAndMember(Goal goal, Member member);
+
+    boolean existsByGoalAndMember(Goal goal, Member member);
 }

@@ -18,13 +18,18 @@ public class GoalAgreeService {
     private final GoalRepository goalRepository;
     private final MemberRepository memberRepository;
 
-    public void agreeGoal(Long goalId) {
+    public void agreeGoal(Long goalId, Long memberId) {
         Goal goal = goalRepository.findById(goalId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_GOAL));
 
-        Long memberId = 2L; // 임시 member 값
+//        Long memberId = 5L; // 임시 member 값
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_MEMBER));
+
+        // 멤버가 프로젝트에 속해 있는지 확인
+        if (!goal.getProject().getMembers().contains(member)) {
+            throw new BaseException(BaseResponseCode.NOT_FOUND_MEMBER);
+        }
 
         // 해당 멤버에 대한 GoalAgree 엔티티 조회, 없으면 생성함(추후 멤버 추가됐을 때)
         GoalAgree goalAgree = goalAgreeRepository.findByGoalAndMember(goal, member)

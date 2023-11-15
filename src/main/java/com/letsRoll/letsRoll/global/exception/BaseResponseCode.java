@@ -32,12 +32,17 @@ public enum BaseResponseCode {
 
     // goal
     NOT_FOUND_GOAL("G0001", HttpStatus.NOT_FOUND, "GOAL을 찾을 수 없습니다."),
-
+    NOT_COMPLETED_GOAL("G0002", HttpStatus.BAD_REQUEST, "GOAL을 완료해야 합니다."),
     // todo
     NOT_FOUND_TODO("T0001", HttpStatus.NOT_FOUND, "Todo를 찾을 수 없습니다."),
 
     // todoManager
     NOT_FOUND_TODOMANAGER("TM0001", HttpStatus.NOT_FOUND, "TodoManager를 찾을 수 없습니다"),
+
+
+    // memoir
+    ALREADY_WRITTEN_MEMOIR("M0001", HttpStatus.BAD_REQUEST, "이미 회고를 작성했습니다."),
+    NOT_FOUND_MEMOIR("M0002", HttpStatus.NOT_FOUND, "회고를 찾을 수 없습니다."),
 
     // comment
     NOT_FOUND_COMMENT("C0001", HttpStatus.NOT_FOUND, "Comment를 찾을 수 없습니다"),

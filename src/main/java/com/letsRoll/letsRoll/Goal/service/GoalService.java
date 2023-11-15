@@ -63,5 +63,17 @@ public class GoalService {
         return GoalResDto.fromEntity(goal);
     }
 
+    public void completeGoal(Long goalId) {
+        Goal goal = goalRepository.findById(goalId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_GOAL));
+    for(GoalAgree goalAgree : goal.getGoalAgreeList()) {
+        if(!goalAgree.getMemberCheck()) {
+            throw new BaseException(BaseResponseCode.NOT_COMPLETED_GOAL);
+        }
+    }
+        goal.setIsComplete(true);
+        goalRepository.save(goal);
+    }
+
 
 }

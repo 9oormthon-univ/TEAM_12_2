@@ -55,7 +55,7 @@ public class Goal extends BaseEntity {
     private List<GoalAgree> goalAgreeList;
 
     @Builder
-    public Goal(@NonNull Project project, @NonNull String title ,@NonNull String content, @NonNull LocalDate startDate, @NonNull LocalDate endDate) {
+    public Goal(@NonNull Project project, @NonNull String title, @NonNull String content, @NonNull LocalDate startDate, @NonNull LocalDate endDate) {
         this.project = project;
         this.title = title;
         this.content = content;

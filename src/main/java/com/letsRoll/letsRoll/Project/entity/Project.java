@@ -3,6 +3,7 @@ package com.letsRoll.letsRoll.Project.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.letsRoll.letsRoll.Goal.entity.Goal;
 import com.letsRoll.letsRoll.Member.entity.Member;
+import com.letsRoll.letsRoll.Memoir.entity.Memoir;
 import com.letsRoll.letsRoll.global.common.BaseEntity;
 import com.letsRoll.letsRoll.global.enums.Mode;
 import jakarta.persistence.*;
