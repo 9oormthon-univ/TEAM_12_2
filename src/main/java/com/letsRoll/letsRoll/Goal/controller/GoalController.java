@@ -1,5 +1,6 @@
 package com.letsRoll.letsRoll.Goal.controller;
 
+import com.letsRoll.letsRoll.Goal.dto.req.GoalAgreeReq;
 import com.letsRoll.letsRoll.Goal.dto.res.GoalResDto;
 import com.letsRoll.letsRoll.Goal.dto.req.GoalAddReq;
 import com.letsRoll.letsRoll.Goal.service.GoalAgreeService;
@@ -29,10 +30,15 @@ public class GoalController {
     }
 
     @PostMapping("/{goalId}/agree")
-    public BaseResponse<Void> agreeGoal(@PathVariable Long goalId) {
-        goalAgreeService.agreeGoal(goalId);
+    public BaseResponse<Void> agreeGoal(@PathVariable Long goalId, @RequestBody @Valid GoalAgreeReq goalAgreeReq) {
+        goalAgreeService.agreeGoal(goalId, goalAgreeReq.getMemberId());
         return new BaseResponse<>(BaseResponseCode.SUCCESS);
     }
 
+    @PostMapping("/{goalId}/complete")
+    public BaseResponse<Void> completeGoal(@PathVariable Long goalId) {
+        goalService.completeGoal(goalId);
+        return new BaseResponse<>(BaseResponseCode.SUCCESS);
+    }
 
 }
