@@ -1,5 +1,6 @@
 package com.letsRoll.letsRoll.Project.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.letsRoll.letsRoll.Goal.entity.Goal;
 import com.letsRoll.letsRoll.Member.entity.Member;
 import com.letsRoll.letsRoll.global.common.BaseEntity;
@@ -46,9 +47,11 @@ public class Project extends BaseEntity {
     private LocalDate endDate;
 
     @OneToMany(mappedBy = "project")
+    @JsonManagedReference
     private List<Goal> goals;
 
     @OneToMany(mappedBy = "project")
+    @JsonManagedReference
     private List<Member> members;
 
     @Builder

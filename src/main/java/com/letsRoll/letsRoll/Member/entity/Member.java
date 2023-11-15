@@ -1,5 +1,6 @@
 package com.letsRoll.letsRoll.Member.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.letsRoll.letsRoll.Project.entity.Project;
 import com.letsRoll.letsRoll.global.common.BaseEntity;
 import com.letsRoll.letsRoll.User.entity.User;
@@ -28,6 +29,7 @@ public class Member extends BaseEntity {
     @NonNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
+    @JsonBackReference
     private Project project;
 
     @NonNull

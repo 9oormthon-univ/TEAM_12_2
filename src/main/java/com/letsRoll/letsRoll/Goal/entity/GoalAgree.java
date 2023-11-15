@@ -1,6 +1,7 @@
 package com.letsRoll.letsRoll.Goal.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.letsRoll.letsRoll.global.common.BaseEntity;
 import com.letsRoll.letsRoll.Member.entity.Member;
 import jakarta.persistence.*;
@@ -27,6 +28,7 @@ public class GoalAgree extends BaseEntity {
     @NonNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goal_id")
+    @JsonBackReference
     private Goal goal;
 
     @NonNull
@@ -39,4 +41,5 @@ public class GoalAgree extends BaseEntity {
         this.goal = goal;
         this.member = member;
     }
+
 }

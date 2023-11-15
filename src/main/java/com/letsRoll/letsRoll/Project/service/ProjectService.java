@@ -1,6 +1,6 @@
 package com.letsRoll.letsRoll.Project.service;
 
-import com.letsRoll.letsRoll.Goal.dto.GoalDto;
+import com.letsRoll.letsRoll.Goal.dto.res.GoalResDto;
 import com.letsRoll.letsRoll.Goal.entity.Goal;
 import com.letsRoll.letsRoll.Goal.repository.GoalRepository;
 import com.letsRoll.letsRoll.Goal.service.GoalService;
@@ -63,11 +63,11 @@ public class ProjectService {
         projectRepository.save(project);
     }
 
-    public List<GoalDto> getGoalsForProject(Long projectId) {
+    public List<GoalResDto> getGoalsForProject(Long projectId) {
         List<Goal> goals = goalRepository.findByProject_Id(projectId);
 
         return goals.stream()
-                .map(GoalDto::fromEntity)
+                .map(GoalResDto::fromEntity)
                 .collect(Collectors.toList());
     }
 
@@ -105,5 +105,12 @@ public class ProjectService {
                 .build();
 
         memberRepository.save(member);
+    }
+
+    public void getProjects(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_PROJECT));
+
+
     }
 }
