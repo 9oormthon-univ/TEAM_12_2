@@ -1,6 +1,6 @@
 package com.letsRoll.letsRoll.Goal.service;
 
-import com.letsRoll.letsRoll.Goal.dto.GoalDto;
+import com.letsRoll.letsRoll.Goal.dto.res.GoalResDto;
 import com.letsRoll.letsRoll.Goal.dto.req.GoalAddReq;
 import com.letsRoll.letsRoll.Goal.entity.Goal;
 import com.letsRoll.letsRoll.Goal.entity.GoalAgree;
@@ -56,11 +56,11 @@ public class GoalService {
 
     }
 
-    public GoalDto getGoalDetails(Long goalId) {
+    public GoalResDto getGoalDetails(Long goalId) {
         Goal goal = goalRepository.findById(goalId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_GOAL));
 
-        return GoalDto.fromEntity(goal);
+        return GoalResDto.fromEntity(goal);
     }
 
 

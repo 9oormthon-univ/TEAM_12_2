@@ -1,6 +1,8 @@
 package com.letsRoll.letsRoll.Goal.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.letsRoll.letsRoll.global.common.BaseEntity;
 import com.letsRoll.letsRoll.Project.entity.Project;
 import jakarta.persistence.*;
@@ -9,6 +11,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,6 +27,7 @@ public class Goal extends BaseEntity {
     @NonNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
+    @JsonBackReference
     private Project project;
 
     @NonNull
@@ -46,6 +50,10 @@ public class Goal extends BaseEntity {
     @Setter
     private Boolean isComplete = false;
 
+    @OneToMany(mappedBy = "goal", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<GoalAgree> goalAgreeList;
+
     @Builder
     public Goal(@NonNull Project project, @NonNull String title ,@NonNull String content, @NonNull LocalDate startDate, @NonNull LocalDate endDate) {
         this.project = project;
@@ -54,4 +62,5 @@ public class Goal extends BaseEntity {
         this.startDate = startDate;
         this.endDate = endDate;
     }
+
 }
