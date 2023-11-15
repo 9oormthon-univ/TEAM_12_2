@@ -35,6 +35,7 @@ public class Comment extends BaseEntity {
     private Todo todo;
 
     @NonNull
+    @Enumerated(EnumType.STRING)
     private CommentType type;
 
     @NonNull

@@ -32,6 +32,7 @@ public class Feeling extends BaseEntity {
 
     @NonNull
     @Setter
+    @Enumerated(EnumType.STRING)
     private Emoji emoji;
 
     @Builder

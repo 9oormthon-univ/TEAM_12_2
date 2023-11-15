@@ -8,9 +8,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findAllByGoalAndTodoAndTypeOrderByCreatedDateAsc(Goal goal, Todo todo, CommentType commentType);
+    Optional<Comment> findCommentByIdAndTodoAndType(Long commentId, Todo todo, CommentType type);
+    Optional<Comment> findCommentByIdAndGoalAndType(Long commentId, Goal goal, CommentType type);
 
 }
