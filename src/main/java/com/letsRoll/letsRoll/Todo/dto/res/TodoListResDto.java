@@ -5,28 +5,34 @@ import com.letsRoll.letsRoll.Todo.entity.Todo;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Getter
 public class TodoListResDto {
-    private Long groupId;
+    private Long goalId;
     private String goalContent;
     private Long todoId;
     private String todoContent;
-    private Long todoManagerId;
+    private Long todoManagerMemberId;
     private String todoManagerNickName;
     private Boolean isComplete;
+    private LocalDate todoEndDate;
 
     @Builder
-    public TodoListResDto(Long groupId, String goalContent, Long todoId, String todoContent, Long todoManagerId, String todoManagerNickName, Boolean isComplete) {
-        this.groupId = groupId;
+    public TodoListResDto(Long goalId, String goalContent, Long todoId, String todoContent, Long todoManagerMemberId, String todoManagerNickName, Boolean isComplete, LocalDate todoEndDate) {
+        this.goalId = goalId;
         this.goalContent = goalContent;
         this.todoId = todoId;
         this.todoContent = todoContent;
-        this.todoManagerId = todoManagerId;
+        this.todoManagerMemberId = todoManagerMemberId;
         this.todoManagerNickName = todoManagerNickName;
         this.isComplete = isComplete;
+        this.todoEndDate = todoEndDate;
     }
 
 

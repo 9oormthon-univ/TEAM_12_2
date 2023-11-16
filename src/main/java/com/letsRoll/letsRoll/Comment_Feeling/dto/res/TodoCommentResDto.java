@@ -12,6 +12,6 @@ public class TodoCommentResDto {
     private Long todoId;
     private String todoContent;
     private LocalDate todoEndDate;
-    private Long memberId; // todo담당자(todoManager)의 memberId
+    private Long todoManagerMemberId; // todo담당자(todoManager)의 memberId
     private List<CommentInfoDto> commentList; //한 todo에 할당된 comment 리스트
 }

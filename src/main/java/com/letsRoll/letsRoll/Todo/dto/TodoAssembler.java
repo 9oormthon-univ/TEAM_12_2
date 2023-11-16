@@ -4,7 +4,6 @@ import com.letsRoll.letsRoll.Goal.entity.Goal;
 import com.letsRoll.letsRoll.Member.entity.Member;
 import com.letsRoll.letsRoll.Todo.dto.res.MyTodoResDto;
 import com.letsRoll.letsRoll.Todo.dto.res.TodoListResDto;
-import com.letsRoll.letsRoll.Todo.dto.res.TodoResDto;
 import com.letsRoll.letsRoll.Todo.entity.Todo;
 import com.letsRoll.letsRoll.Todo.entity.TodoEndManager;
 import com.letsRoll.letsRoll.Todo.entity.TodoManager;
@@ -27,16 +26,6 @@ public class TodoAssembler {
                 .build();
     }
 
-    public TodoResDto toTodoResDto(Todo todo) {
-        return TodoResDto.builder()
-                .goalId(todo.getGoal().getId())
-                .content(todo.getContent())
-                .endDate(todo.getEndDate())
-                .managerId(todo.getTodoManager().getMember().getId())
-                .endManagerId(todo.getTodoEndManager().getMember().getId())
-                .build();
-    }
-
     public TodoManager toTodoManagerEntity(Member member) {
         return TodoManager.builder()
                 .member(member)
@@ -50,13 +39,14 @@ public class TodoAssembler {
 
     public TodoListResDto toDateTodoListResDtoEntity(Todo todo) {
         return TodoListResDto.builder()
-                .groupId(todo.getGoal().getId())
+                .goalId(todo.getGoal().getId())
                 .goalContent(todo.getGoal().getContent())
                 .todoId(todo.getId())
                 .todoContent(todo.getContent())
-                .todoManagerId(todo.getTodoManager().getMember().getId())
+                .todoManagerMemberId(todo.getTodoManager().getMember().getId())
                 .todoManagerNickName(todo.getTodoManager().getMember().getNickname())
                 .isComplete(todo.getIsComplete())
+                .todoEndDate(todo.getEndDate())
                 .build();
     }
 
@@ -66,7 +56,7 @@ public class TodoAssembler {
                 .goalContent(todo.getGoal().getContent())
                 .todoId(todo.getId())
                 .todoContent(todo.getContent())
-                .todoManagerId(todo.getTodoManager().getMember().getId())
+                .todoManagerMemberId(todo.getTodoManager().getMember().getId())
                 .todoManagerNickName(todo.getTodoManager().getMember().getNickname())
                 .isComplete(todo.getIsComplete())
                 .build();
