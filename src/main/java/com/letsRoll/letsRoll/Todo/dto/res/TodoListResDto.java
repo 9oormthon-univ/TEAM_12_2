@@ -3,6 +3,9 @@ package com.letsRoll.letsRoll.Todo.dto.res;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+
 @Getter
 public class TodoListResDto {
     private Long goalId;
@@ -12,9 +15,10 @@ public class TodoListResDto {
     private Long todoManagerMemberId;
     private String todoManagerNickName;
     private Boolean isComplete;
+    private LocalDate todoEndDate;
 
     @Builder
-    public TodoListResDto(Long goalId, String goalContent, Long todoId, String todoContent, Long todoManagerMemberId, String todoManagerNickName, Boolean isComplete) {
+    public TodoListResDto(Long goalId, String goalContent, Long todoId, String todoContent, Long todoManagerMemberId, String todoManagerNickName, Boolean isComplete, LocalDate todoEndDate) {
         this.goalId = goalId;
         this.goalContent = goalContent;
         this.todoId = todoId;
@@ -22,5 +26,6 @@ public class TodoListResDto {
         this.todoManagerMemberId = todoManagerMemberId;
         this.todoManagerNickName = todoManagerNickName;
         this.isComplete = isComplete;
+        this.todoEndDate = todoEndDate;
     }
 }

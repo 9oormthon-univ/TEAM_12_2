@@ -46,6 +46,7 @@ public class TodoAssembler {
                 .todoManagerMemberId(todo.getTodoManager().getMember().getId())
                 .todoManagerNickName(todo.getTodoManager().getMember().getNickname())
                 .isComplete(todo.getIsComplete())
+                .todoEndDate(todo.getEndDate())
                 .build();
     }
 
