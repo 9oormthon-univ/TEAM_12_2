@@ -134,9 +134,7 @@ public class TodoService {
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_MEMBER));
     }
 
-<<<<<<< HEAD
-    public MonthlyCheckTodoListResDto getMonthlyTodo(String yearMonth)
-    {
+    public MonthlyCheckTodoListResDto getMonthlyTodo(String yearMonth) {
         int year = Integer.parseInt(yearMonth.split("-")[0]);
         int month = Integer.parseInt(yearMonth.split("-")[1]);
         System.out.println("year = " + year);
@@ -144,15 +142,9 @@ public class TodoService {
         List<LocalDate> completeDate = todoRepository.findCompleteDate(year, month);
         List<LocalDate> inCompleteDate = todoRepository.findInCompleteDate(year, month);
 
-        /*
-        YearMonth er = YearMonth.from(LocalDate.parse(yearMonth + "-01"));
-        System.out.println("er = " + er);
-        List<LocalDate> completeDate = todoRepository.findCompleteDate(er.getYear(),er.getMonth());
-        System.out.println("completeDate = " + completeDate);
-        List<LocalDate> inCompleteDate = todoRepository.findInCompleteDate(er.getYear(),er.getMonth());*/
 
         return todoAssembler.toMonthlyCheckEntity(completeDate, inCompleteDate);
-=======
+    }
     public List<TodoListResDto> getTodoListByGoal(Long goalId) {
         Goal goal = getGoal(goalId);
         List<TodoListResDto> todoListResDto = new ArrayList<>();
@@ -162,6 +154,5 @@ public class TodoService {
             todoListResDto.add(todoAssembler.toDateTodoListResDtoEntity(todo));
         }
         return todoListResDto;
->>>>>>> d877a3a1d953e224d64e7cf9ddb1e0291a45a106
     }
 }
