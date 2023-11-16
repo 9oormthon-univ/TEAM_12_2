@@ -64,4 +64,16 @@ public class Project extends BaseEntity {
         this.startDate = startDate;
         this.endDate = endDate;
     }
+
+    public float getProgress() {
+        if (goals == null || goals.isEmpty()) {
+            return 0.0f;
+        }
+
+        long completedGoals = goals.stream()
+                .filter(Goal::getIsComplete)
+                .count();
+
+        return (float) completedGoals / goals.size() * 100;
+    }
 }

@@ -25,6 +25,8 @@ public class ProjectResDto {
     private List<GoalResDto> goals;
     private List<MemberResDto> members;
 
+    private float progress;
+
     public static ProjectResDto fromEntity(Project project) {
         ProjectResDto projectDto = new ProjectResDto();
         projectDto.setProjectId(project.getId());
@@ -37,6 +39,7 @@ public class ProjectResDto {
         projectDto.setEndDate(project.getEndDate());
         projectDto.setGoals(GoalResDto.fromEntities(project.getGoals()));
         projectDto.setMembers(MemberResDto.fromEntities(project.getMembers()));
+        projectDto.setProgress(project.getProgress());
         return projectDto;
     }
 }

@@ -38,6 +38,9 @@ public class TodoService {
     public void addTodo(AddTodoReqDto addTodoReqDto) {
         Goal goal = getGoal((addTodoReqDto.getGoalId()));
         Member member = getMember((addTodoReqDto.getMemberId()));
+        if (!goal.getProject().getMembers().contains(member)){
+            throw new BaseException(BaseResponseCode.NOT_PROJECT_MEMBER);
+        }
         Optional<TodoManager> todoManagerOptional = todoManagerRepository.findByMember(member);
         if (todoManagerOptional.isEmpty()) {
             todoRepository.save(todoAssembler.toTodoEntity(goal, addTodoManager(member), addTodoReqDto.getContent(), addTodoReqDto.getEndDate()));
@@ -124,5 +127,16 @@ public class TodoService {
     public Member getMember(Long memberId) {
         return memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_MEMBER));
+    }
+
+    public List<TodoListResDto> getTodoListByGoal(Long goalId) {
+        Goal goal = getGoal(goalId);
+        List<TodoListResDto> todoListResDto = new ArrayList<>();
+        List<Todo> todoList = todoRepository.findTodosByGoalOrderByCreatedDate(goal);
+
+        for (Todo todo : todoList) {
+            todoListResDto.add(todoAssembler.toDateTodoListResDtoEntity(todo));
+        }
+        return todoListResDto;
     }
 }

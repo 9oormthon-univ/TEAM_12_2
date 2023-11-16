@@ -1,5 +1,6 @@
 package com.letsRoll.letsRoll.Todo.repository;
 
+import com.letsRoll.letsRoll.Goal.entity.Goal;
 import com.letsRoll.letsRoll.Todo.entity.Todo;
 import com.letsRoll.letsRoll.Todo.entity.TodoManager;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,4 +26,7 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 
     // 내 todo들 생성순으로 조회
     List<Todo> findTodosByTodoManagerOrderByCreatedDate(TodoManager todoManager);
+
+    // goal에 대한 todo 찾고 생성순으로 조회
+    List<Todo> findTodosByGoalOrderByCreatedDate(Goal goal);
 }
