@@ -25,6 +25,7 @@ public enum BaseResponseCode {
 
     // member
     NOT_FOUND_MEMBER("M0001", HttpStatus.NOT_FOUND, "MEMBER를 찾을 수 없습니다."),
+    NOT_PROJECT_MEMBER("M0002", HttpStatus.BAD_REQUEST, "프로젝트에 속해있지 않은 멤버입니다."),
 
     // project
     NOT_FOUND_PROJECT("P0001", HttpStatus.NOT_FOUND, "PROJECT를 찾을 수 없습니다."),
@@ -35,6 +36,7 @@ public enum BaseResponseCode {
     NOT_COMPLETED_GOAL("G0002", HttpStatus.BAD_REQUEST, "GOAL을 완료해야 합니다."),
     // todo
     NOT_FOUND_TODO("T0001", HttpStatus.NOT_FOUND, "Todo를 찾을 수 없습니다."),
+    NOT_ALL_TODOS_COMPLETE("T0002", HttpStatus.BAD_REQUEST, "모든 할 일을 완료해야 합니다."),
 
     // todoManager
     NOT_FOUND_TODOMANAGER("TM0001", HttpStatus.NOT_FOUND, "TodoManager를 찾을 수 없습니다"),
