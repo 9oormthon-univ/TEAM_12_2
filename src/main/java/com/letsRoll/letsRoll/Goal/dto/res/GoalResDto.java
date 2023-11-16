@@ -23,8 +23,6 @@ public class GoalResDto {
     private boolean isComplete;
     private List<GoalAgreeMemberCheckResDto> goalAgreeList;
     private List<TodoListResDto> todoList;
-
-
     public static GoalResDto fromEntity(Goal goal) {
         GoalResDto goalDto = new GoalResDto();
         goalDto.setProjectId(goal.getProject().getId());

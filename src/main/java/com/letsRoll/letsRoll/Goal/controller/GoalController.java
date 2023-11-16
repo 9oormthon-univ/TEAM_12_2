@@ -3,6 +3,7 @@ package com.letsRoll.letsRoll.Goal.controller;
 import com.letsRoll.letsRoll.Goal.dto.req.GoalAgreeReq;
 import com.letsRoll.letsRoll.Goal.dto.res.GoalResDto;
 import com.letsRoll.letsRoll.Goal.dto.req.GoalAddReq;
+import com.letsRoll.letsRoll.Goal.dto.res.TimeLineResDto;
 import com.letsRoll.letsRoll.Goal.service.GoalAgreeService;
 import com.letsRoll.letsRoll.Goal.service.GoalService;
 import com.letsRoll.letsRoll.Todo.dto.res.TodoListResDto;
@@ -29,6 +30,7 @@ public class GoalController {
         goalService.addGoal(projectId, goalAddReq);
         return new BaseResponse<>(BaseResponseCode.SUCCESS);
     }
+
     @GetMapping("/{goalId}")
     public BaseResponse<GoalResDto> getGoalDetails(@PathVariable Long goalId) {
         GoalResDto goalDetails = goalService.getGoalDetails(goalId);
@@ -52,4 +54,8 @@ public class GoalController {
         return new BaseResponse<>(todoService.getTodoListByGoal(goalId));
     }
 
+    @GetMapping("/{goalId}/timeline")
+    public BaseResponse<TimeLineResDto> getTimeLine(@PathVariable Long goalId) {
+        return new BaseResponse<>(goalService.getTimeLine(goalId));
+    }
 }

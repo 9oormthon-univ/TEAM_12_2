@@ -1,6 +1,8 @@
 package com.letsRoll.letsRoll.Todo.service;
 
 import com.fasterxml.jackson.datatype.jsr310.ser.YearMonthSerializer;
+import com.letsRoll.letsRoll.Comment_Feeling.entity.Comment;
+import com.letsRoll.letsRoll.Goal.dto.res.TimeLineResDto;
 import com.letsRoll.letsRoll.Goal.entity.Goal;
 import com.letsRoll.letsRoll.Goal.repository.GoalRepository;
 import com.letsRoll.letsRoll.Member.entity.Member;
@@ -22,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Year;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -89,14 +92,28 @@ public class TodoService {
         Member member = getMember(memberId);
 
         if (todo.getIsComplete()) { // false -> true 변경
-            TodoEndManager todoEndManager = todoEndManagerRepository.save(todoAssembler.toTodoEndManagerEntity(member));
-            todo.setTodoEndManager(todoEndManager);
-            todo.setFinishDate(LocalDate.now());
+            Optional<TodoEndManager> todoEndManager = todoEndManagerRepository.findByMember(member);
+            if (todoEndManager.isEmpty()) {
+                List<Todo> todoList = new ArrayList<>();
+                todoList.add(todo);
+                todo.setTodoEndManager(todoEndManagerRepository.save(todoAssembler.toTodoEndManagerEntity(member, todoList)));
+                todo.setFinishDate(LocalDateTime.now());
+            } else {
+                TodoEndManager endManager = todoEndManager.get();
+                endManager.getTodoList().add(todo);
+                todo.setTodoEndManager(todoEndManagerRepository.save(endManager));
+                todo.setFinishDate(LocalDateTime.now());
+            }
         } else { //true -> false 변경
             TodoEndManager todoEndManager = todo.getTodoEndManager();
+            System.out.println("endManager.getTodoList() = " + todoEndManager.getTodoList());
+
+            todoEndManager.getTodoList().remove(todo);
+            System.out.println("endManager.getTodoList() = " + todoEndManager.getTodoList());
+
             todo.setTodoEndManager(null);
             todo.setFinishDate(null);
-            todoEndManagerRepository.delete(todoEndManager);
+            todoEndManagerRepository.save(todoEndManager);
         }
         todoRepository.save(todo);
     }
