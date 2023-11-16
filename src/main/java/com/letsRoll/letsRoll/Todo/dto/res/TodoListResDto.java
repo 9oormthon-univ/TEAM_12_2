@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class TodoListResDto {
-    private Long groupId;
+    private Long goalId;
     private String goalContent;
     private Long todoId;
     private String todoContent;
@@ -14,8 +14,8 @@ public class TodoListResDto {
     private Boolean isComplete;
 
     @Builder
-    public TodoListResDto(Long groupId, String goalContent, Long todoId, String todoContent, Long todoManagerMemberId, String todoManagerNickName, Boolean isComplete) {
-        this.groupId = groupId;
+    public TodoListResDto(Long goalId, String goalContent, Long todoId, String todoContent, Long todoManagerMemberId, String todoManagerNickName, Boolean isComplete) {
+        this.goalId = goalId;
         this.goalContent = goalContent;
         this.todoId = todoId;
         this.todoContent = todoContent;
