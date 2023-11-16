@@ -1,11 +1,13 @@
 package com.letsRoll.letsRoll.Todo.service;
 
+import com.fasterxml.jackson.datatype.jsr310.ser.YearMonthSerializer;
 import com.letsRoll.letsRoll.Goal.entity.Goal;
 import com.letsRoll.letsRoll.Goal.repository.GoalRepository;
 import com.letsRoll.letsRoll.Member.entity.Member;
 import com.letsRoll.letsRoll.Member.repository.MemberRepository;
 import com.letsRoll.letsRoll.Todo.dto.TodoAssembler;
 import com.letsRoll.letsRoll.Todo.dto.req.AddTodoReqDto;
+import com.letsRoll.letsRoll.Todo.dto.res.MonthlyCheckTodoListResDto;
 import com.letsRoll.letsRoll.Todo.dto.res.MyTodoResDto;
 import com.letsRoll.letsRoll.Todo.dto.res.TodoListResDto;
 import com.letsRoll.letsRoll.Todo.entity.Todo;
@@ -20,6 +22,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.Year;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -129,6 +134,17 @@ public class TodoService {
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_MEMBER));
     }
 
+    public MonthlyCheckTodoListResDto getMonthlyTodo(String yearMonth) {
+        int year = Integer.parseInt(yearMonth.split("-")[0]);
+        int month = Integer.parseInt(yearMonth.split("-")[1]);
+        System.out.println("year = " + year);
+        System.out.println("month = " + month);
+        List<LocalDate> completeDate = todoRepository.findCompleteDate(year, month);
+        List<LocalDate> inCompleteDate = todoRepository.findInCompleteDate(year, month);
+
+
+        return todoAssembler.toMonthlyCheckEntity(completeDate, inCompleteDate);
+    }
     public List<TodoListResDto> getTodoListByGoal(Long goalId) {
         Goal goal = getGoal(goalId);
         List<TodoListResDto> todoListResDto = new ArrayList<>();

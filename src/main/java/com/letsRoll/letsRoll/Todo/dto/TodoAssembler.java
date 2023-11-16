@@ -2,6 +2,7 @@ package com.letsRoll.letsRoll.Todo.dto;
 
 import com.letsRoll.letsRoll.Goal.entity.Goal;
 import com.letsRoll.letsRoll.Member.entity.Member;
+import com.letsRoll.letsRoll.Todo.dto.res.MonthlyCheckTodoListResDto;
 import com.letsRoll.letsRoll.Todo.dto.res.MyTodoResDto;
 import com.letsRoll.letsRoll.Todo.dto.res.TodoListResDto;
 import com.letsRoll.letsRoll.Todo.entity.Todo;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -59,6 +61,13 @@ public class TodoAssembler {
                 .todoManagerMemberId(todo.getTodoManager().getMember().getId())
                 .todoManagerNickName(todo.getTodoManager().getMember().getNickname())
                 .isComplete(todo.getIsComplete())
+                .build();
+    }
+
+    public MonthlyCheckTodoListResDto toMonthlyCheckEntity(List<LocalDate> completeDates, List<LocalDate> inCompleteDates) {
+        return MonthlyCheckTodoListResDto.builder()
+                .allCompleteDateList(completeDates)
+                .inCompleteDateList(inCompleteDates)
                 .build();
     }
 }

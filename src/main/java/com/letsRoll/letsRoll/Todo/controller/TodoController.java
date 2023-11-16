@@ -1,6 +1,7 @@
 package com.letsRoll.letsRoll.Todo.controller;
 
 import com.letsRoll.letsRoll.Todo.dto.req.AddTodoReqDto;
+import com.letsRoll.letsRoll.Todo.dto.res.MonthlyCheckTodoListResDto;
 import com.letsRoll.letsRoll.Todo.dto.res.MyTodoResDto;
 import com.letsRoll.letsRoll.Todo.dto.res.TodoListResDto;
 import com.letsRoll.letsRoll.Todo.service.TodoService;
@@ -52,5 +53,10 @@ public class TodoController {
     @GetMapping("/{memberId}")
     public BaseResponse<List<MyTodoResDto>> getMyTodo(@PathVariable Long memberId) {
         return new BaseResponse<>(todoService.getMyTodo(memberId));
+    }
+
+    @GetMapping("/monthly")
+    public BaseResponse<MonthlyCheckTodoListResDto> getMonthlyTodo(@RequestParam String yearMonth) {
+        return new BaseResponse<>(todoService.getMonthlyTodo(yearMonth));
     }
 }
