@@ -9,17 +9,17 @@ public class TodoListResDto {
     private String goalContent;
     private Long todoId;
     private String todoContent;
-    private Long todoManagerId;
+    private Long todoManagerMemberId;
     private String todoManagerNickName;
     private Boolean isComplete;
 
     @Builder
-    public TodoListResDto(Long groupId, String goalContent, Long todoId, String todoContent, Long todoManagerId, String todoManagerNickName, Boolean isComplete) {
+    public TodoListResDto(Long groupId, String goalContent, Long todoId, String todoContent, Long todoManagerMemberId, String todoManagerNickName, Boolean isComplete) {
         this.groupId = groupId;
         this.goalContent = goalContent;
         this.todoId = todoId;
         this.todoContent = todoContent;
-        this.todoManagerId = todoManagerId;
+        this.todoManagerMemberId = todoManagerMemberId;
         this.todoManagerNickName = todoManagerNickName;
         this.isComplete = isComplete;
     }

@@ -11,7 +11,7 @@ import java.util.List;
 public class CommentInfoDto {
     private LocalDateTime createdTime;
     private String content;
-    private Long memberId;
+    private Long commentMemberId;
     private Integer emojiCount;
     private List<Long> feelingCheckMemberId;
 }

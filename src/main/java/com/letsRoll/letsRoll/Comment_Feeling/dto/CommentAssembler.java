@@ -40,7 +40,7 @@ public class CommentAssembler {
                 .createdTime(createdTime)
                 .content(content)
                 .emojiCount(emojiCount)
-                .memberId(memberId)
+                .commentMemberId(memberId)
                 .feelingCheckMemberId(feelingCheckMemberId)
                 .build();
     }
@@ -50,7 +50,7 @@ public class CommentAssembler {
         return TodoCommentResDto.builder()
                 .todoId(todo.getId())
                 .todoContent(todo.getContent())
-                .memberId(todo.getTodoManager().getId())
+                .todoManagerMemberId(todo.getTodoManager().getMember().getId())
                 .todoEndDate(todo.getEndDate())
                 .commentList(commentList)
                 .build();

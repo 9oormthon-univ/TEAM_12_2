@@ -10,7 +10,7 @@ public class MyTodoResDto {
     private String goalContent;
     private Long todoId;
     private String todoContent;
-    private Long todoManagerId;
+    private Long todoManagerMemberId;
     private String todoManagerNickName;
     private Boolean isComplete;
 }
