@@ -39,7 +39,7 @@ public class TodoAssembler {
 
     public TodoListResDto toDateTodoListResDtoEntity(Todo todo) {
         return TodoListResDto.builder()
-                .groupId(todo.getGoal().getId())
+                .goalId(todo.getGoal().getId())
                 .goalContent(todo.getGoal().getContent())
                 .todoId(todo.getId())
                 .todoContent(todo.getContent())
