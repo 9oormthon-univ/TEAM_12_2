@@ -1,5 +1,6 @@
 package com.letsRoll.letsRoll.Todo.dto.res;
 
+import com.letsRoll.letsRoll.Todo.dto.TodoAssembler;
 import com.letsRoll.letsRoll.Todo.entity.Todo;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,14 +37,7 @@ public class TodoListResDto {
     }
 
     public static TodoListResDto fromEntity(Todo todo) {
-        return TodoListResDto.builder()
-                .groupId(todo.getGoal().getId())
-                .goalContent(todo.getGoal().getContent())
-                .todoId(todo.getId())
-                .todoContent(todo.getContent())
-                .todoManagerId(todo.getTodoManager().getId())
-                .todoManagerNickName(todo.getTodoManager().getMember().getNickname())
-                .isComplete(todo.getIsComplete())
-                .build();
+        TodoAssembler todoAssembler = new TodoAssembler();
+        return todoAssembler.toDateTodoListResDtoEntity(todo);
     }
 }
