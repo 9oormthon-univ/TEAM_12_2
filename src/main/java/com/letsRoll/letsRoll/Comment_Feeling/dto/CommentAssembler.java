@@ -49,10 +49,12 @@ public class CommentAssembler {
     public TodoCommentResDto toTodoCommentResDtoEntity(Todo todo, List<CommentInfoDto> commentList) {
         return TodoCommentResDto.builder()
                 .todoId(todo.getId())
+                .finishDate(todo.getFinishDate())
                 .todoContent(todo.getContent())
                 .todoManagerMemberId(todo.getTodoManager().getMember().getId())
                 .todoEndDate(todo.getEndDate())
                 .commentList(commentList)
                 .build();
     }
+
 }
