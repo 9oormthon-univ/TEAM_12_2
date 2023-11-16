@@ -3,6 +3,7 @@ package com.letsRoll.letsRoll.Goal.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.letsRoll.letsRoll.Todo.entity.Todo;
 import com.letsRoll.letsRoll.global.common.BaseEntity;
 import com.letsRoll.letsRoll.Project.entity.Project;
 import jakarta.persistence.*;
@@ -53,6 +54,10 @@ public class Goal extends BaseEntity {
     @OneToMany(mappedBy = "goal", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<GoalAgree> goalAgreeList;
+
+    @OneToMany(mappedBy = "goal", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Todo> todoList;
 
     @Builder
     public Goal(@NonNull Project project, @NonNull String title, @NonNull String content, @NonNull LocalDate startDate, @NonNull LocalDate endDate) {

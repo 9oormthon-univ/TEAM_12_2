@@ -5,11 +5,16 @@ import com.letsRoll.letsRoll.Goal.dto.res.GoalResDto;
 import com.letsRoll.letsRoll.Goal.dto.req.GoalAddReq;
 import com.letsRoll.letsRoll.Goal.service.GoalAgreeService;
 import com.letsRoll.letsRoll.Goal.service.GoalService;
+import com.letsRoll.letsRoll.Todo.dto.res.TodoListResDto;
+import com.letsRoll.letsRoll.Todo.service.TodoService;
 import com.letsRoll.letsRoll.global.common.BaseResponse;
 import com.letsRoll.letsRoll.global.exception.BaseResponseCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/goals")
@@ -17,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class GoalController {
     private final GoalService goalService;
     private final GoalAgreeService goalAgreeService;
+    private final TodoService todoService;
 
     @PostMapping("/{projectId}")
     public BaseResponse<Void> addGoal(@PathVariable Long projectId, @RequestBody @Valid GoalAddReq goalAddReq) {
@@ -39,6 +45,11 @@ public class GoalController {
     public BaseResponse<Void> completeGoal(@PathVariable Long goalId) {
         goalService.completeGoal(goalId);
         return new BaseResponse<>(BaseResponseCode.SUCCESS);
+    }
+
+    @GetMapping("/{goalId}/todos")
+    public BaseResponse<List<TodoListResDto>> getTodoListByGoal(@PathVariable Long goalId) {
+        return new BaseResponse<>(todoService.getTodoListByGoal(goalId));
     }
 
 }

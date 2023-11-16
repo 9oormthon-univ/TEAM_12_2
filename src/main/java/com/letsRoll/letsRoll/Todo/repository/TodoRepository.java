@@ -1,5 +1,6 @@
 package com.letsRoll.letsRoll.Todo.repository;
 
+import com.letsRoll.letsRoll.Goal.entity.Goal;
 import com.letsRoll.letsRoll.Todo.entity.Todo;
 import com.letsRoll.letsRoll.Todo.entity.TodoManager;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,6 +29,7 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
     // 내 todo들 생성순으로 조회
     List<Todo> findTodosByTodoManagerOrderByCreatedDate(TodoManager todoManager);
 
+
     // 월별로 완료하지 못한 todo가 있는 endDate들을 조회
     @Query("SELECT distinct todo.endDate FROM Todo todo " +
             "WHERE todo.isComplete = false AND " +
@@ -35,9 +37,13 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
             "ORDER BY todo.endDate ASC")
     List<LocalDate> findInCompleteDate(@Param("year") int year, @Param("month") int month);
 
+    // 월별로 완료한 todo가 있는 endDate들을 조회
     @Query("SELECT distinct todo.endDate FROM Todo todo " +
             "WHERE todo.isComplete = true AND " +
             "YEAR(todo.endDate) = :year AND MONTH(todo.endDate) = :month " +
             "ORDER BY todo.endDate ASC")
     List<LocalDate> findCompleteDate(@Param("year") int year, @Param("month") int month);
+
+    // goal에 대한 todo 찾고 생성순으로 조회
+    List<Todo> findTodosByGoalOrderByCreatedDate(Goal goal);
 }
