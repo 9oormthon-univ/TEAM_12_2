@@ -2,9 +2,7 @@ package com.letsRoll.letsRoll.Todo.dto;
 
 import com.letsRoll.letsRoll.Goal.entity.Goal;
 import com.letsRoll.letsRoll.Member.entity.Member;
-import com.letsRoll.letsRoll.Todo.dto.res.MonthlyCheckTodoListResDto;
-import com.letsRoll.letsRoll.Todo.dto.res.MyTodoResDto;
-import com.letsRoll.letsRoll.Todo.dto.res.TodoListResDto;
+import com.letsRoll.letsRoll.Todo.dto.res.*;
 import com.letsRoll.letsRoll.Todo.entity.Todo;
 import com.letsRoll.letsRoll.Todo.entity.TodoEndManager;
 import com.letsRoll.letsRoll.Todo.entity.TodoManager;
@@ -69,6 +67,22 @@ public class TodoAssembler {
         return MonthlyCheckTodoListResDto.builder()
                 .allCompleteDateList(completeDates)
                 .inCompleteDateList(inCompleteDates)
+                .build();
+    }
+
+    public ReportTodo reportTodo(Member member, int completeCount, int managedCount) {
+        return ReportTodo.builder()
+                .memberId(member.getId())
+                .memberNickName(member.getNickname())
+                .completeCount(completeCount)
+                .managedCount(managedCount)
+                .build();
+    }
+
+    public AllReportTodo allReportTodo(int count, List<ReportTodo> reportTodoList) {
+        return AllReportTodo.builder()
+                .todoCount(count)
+                .reportTodoList(reportTodoList)
                 .build();
     }
 }

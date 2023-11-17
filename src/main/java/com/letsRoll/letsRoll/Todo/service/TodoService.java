@@ -1,17 +1,14 @@
 package com.letsRoll.letsRoll.Todo.service;
 
-import com.fasterxml.jackson.datatype.jsr310.ser.YearMonthSerializer;
-import com.letsRoll.letsRoll.Comment_Feeling.entity.Comment;
-import com.letsRoll.letsRoll.Goal.dto.res.TimeLineResDto;
 import com.letsRoll.letsRoll.Goal.entity.Goal;
 import com.letsRoll.letsRoll.Goal.repository.GoalRepository;
 import com.letsRoll.letsRoll.Member.entity.Member;
 import com.letsRoll.letsRoll.Member.repository.MemberRepository;
+import com.letsRoll.letsRoll.Project.entity.Project;
+import com.letsRoll.letsRoll.Project.repository.ProjectRepository;
 import com.letsRoll.letsRoll.Todo.dto.TodoAssembler;
 import com.letsRoll.letsRoll.Todo.dto.req.AddTodoReqDto;
-import com.letsRoll.letsRoll.Todo.dto.res.MonthlyCheckTodoListResDto;
-import com.letsRoll.letsRoll.Todo.dto.res.MyTodoResDto;
-import com.letsRoll.letsRoll.Todo.dto.res.TodoListResDto;
+import com.letsRoll.letsRoll.Todo.dto.res.*;
 import com.letsRoll.letsRoll.Todo.entity.Todo;
 import com.letsRoll.letsRoll.Todo.entity.TodoEndManager;
 import com.letsRoll.letsRoll.Todo.entity.TodoManager;
@@ -25,9 +22,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Year;
-import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,12 +35,13 @@ public class TodoService {
     private final GoalRepository goalRepository;
     private final MemberRepository memberRepository;
     private final TodoAssembler todoAssembler;
+    private final ProjectRepository projectRepository;
 
     // Todo 추가
     public void addTodo(AddTodoReqDto addTodoReqDto) {
         Goal goal = getGoal((addTodoReqDto.getGoalId()));
         Member member = getMember((addTodoReqDto.getMemberId()));
-        if (!goal.getProject().getMembers().contains(member)){
+        if (!goal.getProject().getMembers().contains(member)) {
             throw new BaseException(BaseResponseCode.NOT_PROJECT_MEMBER);
         }
         Optional<TodoManager> todoManagerOptional = todoManagerRepository.findByMember(member);
@@ -126,7 +121,7 @@ public class TodoService {
     public List<MyTodoResDto> getMyTodo(Long memberId) {
         Member member = getMember(memberId);
         TodoManager todoManager = todoManagerRepository.findByMember(member)
-                .orElseThrow(()->new BaseException(BaseResponseCode.NOT_FOUND_TODOMANAGER));
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_TODOMANAGER));
         List<Todo> todoList = todoRepository.findTodosByTodoManagerOrderByCreatedDate(todoManager);
 
         List<MyTodoResDto> myTodoResDtoList = new ArrayList<>();
@@ -154,14 +149,12 @@ public class TodoService {
     public MonthlyCheckTodoListResDto getMonthlyTodo(String yearMonth) {
         int year = Integer.parseInt(yearMonth.split("-")[0]);
         int month = Integer.parseInt(yearMonth.split("-")[1]);
-        System.out.println("year = " + year);
-        System.out.println("month = " + month);
         List<LocalDate> completeDate = todoRepository.findCompleteDate(year, month);
         List<LocalDate> inCompleteDate = todoRepository.findInCompleteDate(year, month);
 
-
         return todoAssembler.toMonthlyCheckEntity(completeDate, inCompleteDate);
     }
+
     public List<TodoListResDto> getTodoListByGoal(Long goalId) {
         Goal goal = getGoal(goalId);
         List<TodoListResDto> todoListResDto = new ArrayList<>();
@@ -171,5 +164,35 @@ public class TodoService {
             todoListResDto.add(todoAssembler.toDateTodoListResDtoEntity(todo));
         }
         return todoListResDto;
+    }
+
+    public AllReportTodo getReportTodo(Long projectId) {
+        Project project = projectRepository.findProjectById(projectId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_PROJECT));
+        List<Member> members = memberRepository.findByProject(project);
+        System.out.println("project = " + project.getId());
+        System.out.println("members = " + members);
+        int completeCount;
+        int managedCount;
+        int allCount = 0;
+        List<ReportTodo> reportTodoList = new ArrayList<>();
+        for (Member member : members) {
+            System.out.println("member.getNickname() = " + member.getNickname());
+            Optional<TodoManager> todoManager = todoManagerRepository.findByMember(member);
+            Optional<TodoEndManager> todoEndManager = todoEndManagerRepository.findByMember(member);
+            if (todoManager.isEmpty()) {
+                managedCount = 0;
+            } else {
+                List<Todo> todoList = todoRepository.findTodosByTodoManagerOrderByCreatedDate(todoManager.get());
+                managedCount = todoList.size();
+            }
+            allCount += managedCount;
+            completeCount = todoEndManager.map(endManager -> endManager.getTodoList().size()).orElse(0);
+            reportTodoList.add(todoAssembler.reportTodo(member, completeCount, managedCount));
+        }
+        return AllReportTodo.builder()
+                .todoCount(allCount)
+                .reportTodoList(reportTodoList).build();
+
     }
 }

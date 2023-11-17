@@ -6,7 +6,6 @@ import com.letsRoll.letsRoll.Goal.repository.GoalAgreeRepository;
 import com.letsRoll.letsRoll.Goal.repository.GoalRepository;
 import com.letsRoll.letsRoll.Member.entity.Member;
 import com.letsRoll.letsRoll.Member.repository.MemberRepository;
-import com.letsRoll.letsRoll.Todo.dto.res.TodoListResDto;
 import com.letsRoll.letsRoll.Todo.entity.Todo;
 import com.letsRoll.letsRoll.global.exception.BaseException;
 import com.letsRoll.letsRoll.global.exception.BaseResponseCode;
@@ -46,7 +45,6 @@ public class GoalAgreeService {
             // 모든 할 일이 완료되지 않았을 때의 처리
             throw new BaseException(BaseResponseCode.NOT_ALL_TODOS_COMPLETE);
         }
-
 
         // 사용자가 체크를 누를 때
         goalAgree.setMemberCheck(true);
