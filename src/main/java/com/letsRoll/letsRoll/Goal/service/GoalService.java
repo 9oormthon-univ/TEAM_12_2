@@ -43,28 +43,16 @@ public class GoalService {
     private final FeelingRepository feelingRepository;
     private final TodoRepository todoRepository;
     private final GoalAssembler goalAssembler;
+
     public void addGoal(Long projectId, GoalAddReq goalAddReq) {
 
         // 프로젝트 정보 가져오기
         Project project = getProject(projectId);
-
-        Goal goal = Goal.builder()
-                .project(project)
-                .title(goalAddReq.getTitle())
-                .content(goalAddReq.getContent())
-                .startDate(goalAddReq.getStartDate())
-                .endDate(goalAddReq.getEndDate())
-                .build();
-
-        goalRepository.save(goal);
+        Goal goal = goalRepository.save(goalAssembler.goal(goalAddReq, project));
 
         for (Member member : project.getMembers()) {
             // GoalAgree 정보 저장
-            GoalAgree goalAgree = GoalAgree.builder()
-                    .goal(goal)
-                    .member(member)  // 멤버 정보 주입
-                    .build();
-
+            GoalAgree goalAgree = goalAssembler.goalAgree(goal, member);
             goalAgreeRepository.save(goalAgree);
         }
 
@@ -72,16 +60,15 @@ public class GoalService {
 
     public GoalResDto getGoalDetails(Long goalId) {
         Goal goal = getGoal(goalId);
-
-        return GoalResDto.fromEntity(goal);
+        return GoalAssembler.fromEntity(goal);
     }
 
     public void completeGoal(Long goalId) {
         Goal goal = getGoal(goalId);
-    for(GoalAgree goalAgree : goal.getGoalAgreeList()) {
-        if(!goalAgree.getMemberCheck()) {
-            throw new BaseException(BaseResponseCode.NOT_COMPLETED_GOAL);
-        }
+        for(GoalAgree goalAgree : goal.getGoalAgreeList()) {
+            if(!goalAgree.getMemberCheck()) {
+                throw new BaseException(BaseResponseCode.NOT_COMPLETED_GOAL);
+            }
     }
         goal.setIsComplete(true);
         goal.setFinishDate(LocalDate.now());
@@ -89,9 +76,11 @@ public class GoalService {
     }
     public TimeLineResDto getTimeLine(Long goalId) {
         Goal goal = getGoal(goalId);
+
         List<CommentInfoDto> goalCommentList = getComments(commentRepository.findAllByGoalAndTypeOrderByCreatedDateAsc(goal, CommentType.GOAL));
         List<Todo> todoList = todoRepository.findTodosByGoalAndIsCompleteIsTrueOrderByCreatedDate(goal);
         List<TodoCommentResDto> todoCommentList = new ArrayList<>();
+
         for (Todo todo : todoList) {
             List<CommentInfoDto> todoCommentInfo = getComments(commentRepository.findAllByGoalAndTodoAndTypeOrderByCreatedDateAsc(goal, todo, CommentType.TODO));
             todoCommentList.add(commentAssembler.toTodoCommentResDtoEntity(todo, todoCommentInfo));
@@ -118,8 +107,9 @@ public class GoalService {
         Project project = getProject(projectId);
         List<Goal> goalList = project.getGoals();
         List<ReportGoalResDto> reportGoalResDtoList = new ArrayList<>();
+
         for (Goal goal : goalList) {
-            reportGoalResDtoList.add(ReportGoalResDto.toEntity(project, goal));
+            reportGoalResDtoList.add(goalAssembler.reportGoalResDto(project, goal));
         }
 
         return reportGoalResDtoList;
@@ -127,6 +117,7 @@ public class GoalService {
 
     public CheckGoalAgree checkGoalAgree(Long goalId) {
         Goal goal = getGoal(goalId);
+
         if (todoRepository.findTodosByGoalAndIsCompleteIsFalse(goal).isEmpty()) {
             List<Member> notCheckMembers = goal.getGoalAgreeList().stream()
                     .filter(goalAgree -> !goalAgree.getMemberCheck())

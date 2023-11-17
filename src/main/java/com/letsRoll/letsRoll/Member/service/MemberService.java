@@ -1,5 +1,6 @@
 package com.letsRoll.letsRoll.Member.service;
 
+import com.letsRoll.letsRoll.Member.dto.MemberAssembler;
 import com.letsRoll.letsRoll.Member.dto.res.MemberResDto;
 import com.letsRoll.letsRoll.Member.entity.Member;
 import com.letsRoll.letsRoll.Member.repository.MemberRepository;
@@ -26,7 +27,7 @@ public class MemberService {
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_PROJECT));
 
         List<Member> members = project.getMembers();
-        return MemberResDto.fromEntities(members);
+        return MemberAssembler.fromEntities(members);
     }
 
 

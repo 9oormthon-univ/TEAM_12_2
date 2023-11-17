@@ -2,8 +2,8 @@ package com.letsRoll.letsRoll.Goal.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.letsRoll.letsRoll.global.common.BaseEntity;
 import com.letsRoll.letsRoll.Member.entity.Member;
+import com.letsRoll.letsRoll.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -41,5 +41,4 @@ public class GoalAgree extends BaseEntity {
         this.goal = goal;
         this.member = member;
     }
-
 }
