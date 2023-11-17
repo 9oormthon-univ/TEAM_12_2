@@ -23,6 +23,10 @@ public enum BaseResponseCode {
     ALREADY_EXIST_USER("U0001", HttpStatus.CONFLICT, "이미 존재하는 USER입니다"),
     WRONG_PASSWORD("U0002", HttpStatus.BAD_REQUEST, "비밀번호가 틀렸습니다."),
 
+    NOT_FOUND_USER("U0003", HttpStatus.NOT_FOUND, "USER를 찾을 수 없습니다."),
+
+    NOT_EQUAL_PASSWORD("U0004", HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
+
     // member
     NOT_FOUND_MEMBER("M0001", HttpStatus.NOT_FOUND, "MEMBER를 찾을 수 없습니다."),
     NOT_PROJECT_MEMBER("M0002", HttpStatus.BAD_REQUEST, "프로젝트에 속해있지 않은 멤버입니다."),
