@@ -37,7 +37,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests((authz) -> authz
                     .requestMatchers("/api/users/signup", "/api/users/login").permitAll()
-                    .anyRequest().authenticated()
+                    .anyRequest().permitAll()
                  )
                 .sessionManagement((session) -> session
                     .sessionFixation().changeSessionId()
