@@ -9,6 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface TodoEndManagerRepository extends JpaRepository<TodoEndManager, Long> {
-
     Optional<TodoEndManager> findByMember(Member member);
 }

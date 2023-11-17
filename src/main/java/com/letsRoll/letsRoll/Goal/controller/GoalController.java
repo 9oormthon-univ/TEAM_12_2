@@ -3,9 +3,11 @@ package com.letsRoll.letsRoll.Goal.controller;
 import com.letsRoll.letsRoll.Goal.dto.req.GoalAgreeReq;
 import com.letsRoll.letsRoll.Goal.dto.res.GoalResDto;
 import com.letsRoll.letsRoll.Goal.dto.req.GoalAddReq;
+import com.letsRoll.letsRoll.Goal.dto.res.ReportGoalResDto;
 import com.letsRoll.letsRoll.Goal.dto.res.TimeLineResDto;
 import com.letsRoll.letsRoll.Goal.service.GoalAgreeService;
 import com.letsRoll.letsRoll.Goal.service.GoalService;
+import com.letsRoll.letsRoll.Project.dto.res.ProjectResDto;
 import com.letsRoll.letsRoll.Todo.dto.res.TodoListResDto;
 import com.letsRoll.letsRoll.Todo.service.TodoService;
 import com.letsRoll.letsRoll.global.common.BaseResponse;
@@ -58,4 +60,10 @@ public class GoalController {
     public BaseResponse<TimeLineResDto> getTimeLine(@PathVariable Long goalId) {
         return new BaseResponse<>(goalService.getTimeLine(goalId));
     }
+
+    @GetMapping("/report/{projectId}")
+    public BaseResponse<List<ReportGoalResDto>> getReportGoal(@PathVariable Long projectId) {
+        return new BaseResponse<>(goalService.getReportGoal(projectId));
+    }
+
 }

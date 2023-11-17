@@ -9,6 +9,7 @@ import com.letsRoll.letsRoll.Comment_Feeling.repository.CommentRepository;
 import com.letsRoll.letsRoll.Comment_Feeling.repository.FeelingRepository;
 import com.letsRoll.letsRoll.Goal.dto.res.GoalResDto;
 import com.letsRoll.letsRoll.Goal.dto.req.GoalAddReq;
+import com.letsRoll.letsRoll.Goal.dto.res.ReportGoalResDto;
 import com.letsRoll.letsRoll.Goal.dto.res.TimeLineResDto;
 import com.letsRoll.letsRoll.Goal.entity.Goal;
 import com.letsRoll.letsRoll.Goal.entity.GoalAgree;
@@ -42,20 +43,14 @@ public class GoalService {
     public void addGoal(Long projectId, GoalAddReq goalAddReq) {
 
         // 프로젝트 정보 가져오기
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_PROJECT));
-
-        String title = goalAddReq.getTitle();
-        String content = goalAddReq.getContent();
-        LocalDate startDate = goalAddReq.getStartDate();
-        LocalDate endDate = goalAddReq.getEndDate();
+        Project project = getProject(projectId);
 
         Goal goal = Goal.builder()
                 .project(project)
-                .title(title)
-                .content(content)
-                .startDate(startDate)
-                .endDate(endDate)
+                .title(goalAddReq.getTitle())
+                .content(goalAddReq.getContent())
+                .startDate(goalAddReq.getStartDate())
+                .endDate(goalAddReq.getEndDate())
                 .build();
 
         goalRepository.save(goal);
@@ -73,15 +68,13 @@ public class GoalService {
     }
 
     public GoalResDto getGoalDetails(Long goalId) {
-        Goal goal = goalRepository.findById(goalId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_GOAL));
+        Goal goal = getGoal(goalId);
 
         return GoalResDto.fromEntity(goal);
     }
 
     public void completeGoal(Long goalId) {
-        Goal goal = goalRepository.findById(goalId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_GOAL));
+        Goal goal = getGoal(goalId);
     for(GoalAgree goalAgree : goal.getGoalAgreeList()) {
         if(!goalAgree.getMemberCheck()) {
             throw new BaseException(BaseResponseCode.NOT_COMPLETED_GOAL);
@@ -91,8 +84,7 @@ public class GoalService {
         goalRepository.save(goal);
     }
     public TimeLineResDto getTimeLine(Long goalId) {
-        Goal goal = goalRepository.findById(goalId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_GOAL));
+        Goal goal = getGoal(goalId);
         List<CommentInfoDto> goalCommentList = getComments(commentRepository.findAllByGoalAndTypeOrderByCreatedDateAsc(goal, CommentType.GOAL));
         List<Todo> todoList = todoRepository.findTodosByGoalAndIsCompleteIsTrueOrderByCreatedDate(goal);
         List<TodoCommentResDto> todoCommentList = new ArrayList<>();
@@ -105,6 +97,7 @@ public class GoalService {
 
     public List<CommentInfoDto> getComments(List<Comment> comments) {
         List<CommentInfoDto> commentList = new ArrayList<>();
+
         for (Comment comment : comments) {
             List<Feeling> feelingList = feelingRepository.findAllByComment(comment);
 
@@ -115,5 +108,26 @@ public class GoalService {
                     memberList.size(), memberList));
         }
         return commentList;
+    }
+
+    public List<ReportGoalResDto> getReportGoal(Long projectId) {
+        Project project = getProject(projectId);
+        List<Goal> goalList = project.getGoals();
+        List<ReportGoalResDto> reportGoalResDtoList = new ArrayList<>();
+        for (Goal goal : goalList) {
+            reportGoalResDtoList.add(ReportGoalResDto.toEntity(project, goal));
+        }
+
+        return reportGoalResDtoList;
+    }
+
+    public Project getProject(Long projectId) {
+        return projectRepository.findById(projectId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_PROJECT));
+    }
+
+    public Goal getGoal(Long goalId) {
+        return goalRepository.findById(goalId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_GOAL));
     }
 }
