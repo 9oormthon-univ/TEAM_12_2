@@ -33,9 +33,10 @@ public class TodoAssembler {
                 .member(member)
                 .build();
     }
-    public TodoEndManager toTodoEndManagerEntity(Member member) {
+    public TodoEndManager toTodoEndManagerEntity(Member member, List<Todo> todoList) {
         return TodoEndManager.builder()
                 .member(member)
+                .todoList(todoList)
                 .build();
     }
 

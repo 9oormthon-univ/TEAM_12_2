@@ -9,6 +9,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -44,7 +45,7 @@ public class Todo extends BaseEntity {
     private LocalDate startDate;
 
     @Setter
-    private LocalDate finishDate;
+    private LocalDateTime finishDate;
 
     @NonNull //목표 날짜
     private LocalDate endDate;

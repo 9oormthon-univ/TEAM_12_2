@@ -46,4 +46,5 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 
     // goal에 대한 todo 찾고 생성순으로 조회
     List<Todo> findTodosByGoalOrderByCreatedDate(Goal goal);
+    List<Todo> findTodosByGoalAndIsCompleteIsTrueOrderByCreatedDate(Goal goal);
 }
