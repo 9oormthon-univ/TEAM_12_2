@@ -47,4 +47,3 @@ public class BaseResponse<T> {
         return new BaseResponse<>(statusCode,code, message);
     }
 }
-

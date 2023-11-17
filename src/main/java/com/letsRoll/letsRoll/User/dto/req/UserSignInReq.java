@@ -11,8 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Valid
-public class UserSignUpReq {
+public class UserSignInReq {
     private String userName;
     private String password;
-    private String nickname;
 }
