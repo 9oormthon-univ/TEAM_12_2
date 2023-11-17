@@ -35,4 +35,6 @@ public class UserController {
         loggedInUser.setSessionId(session.getId());
         return new BaseResponse<>(loggedInUser);
     }
+
+
 }
