@@ -34,6 +34,7 @@ public enum BaseResponseCode {
     // goal
     NOT_FOUND_GOAL("G0001", HttpStatus.NOT_FOUND, "GOAL을 찾을 수 없습니다."),
     NOT_COMPLETED_GOAL("G0002", HttpStatus.BAD_REQUEST, "GOAL을 완료해야 합니다."),
+
     // todo
     NOT_FOUND_TODO("T0001", HttpStatus.NOT_FOUND, "Todo를 찾을 수 없습니다."),
     NOT_ALL_TODOS_COMPLETE("T0002", HttpStatus.BAD_REQUEST, "모든 할 일을 완료해야 합니다."),

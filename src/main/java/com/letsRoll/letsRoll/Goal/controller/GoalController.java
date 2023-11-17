@@ -1,6 +1,7 @@
 package com.letsRoll.letsRoll.Goal.controller;
 
 import com.letsRoll.letsRoll.Goal.dto.req.GoalAgreeReq;
+import com.letsRoll.letsRoll.Goal.dto.res.CheckGoalAgree;
 import com.letsRoll.letsRoll.Goal.dto.res.GoalResDto;
 import com.letsRoll.letsRoll.Goal.dto.req.GoalAddReq;
 import com.letsRoll.letsRoll.Goal.dto.res.ReportGoalResDto;
@@ -66,4 +67,8 @@ public class GoalController {
         return new BaseResponse<>(goalService.getReportGoal(projectId));
     }
 
+    @GetMapping("/{goalId}/check")
+    public BaseResponse<CheckGoalAgree> checkGoalAgree(@PathVariable Long goalId) {
+        return new BaseResponse<>(goalService.checkGoalAgree(goalId));
+    }
 }

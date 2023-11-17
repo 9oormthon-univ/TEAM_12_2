@@ -88,12 +88,12 @@ public class TodoService {
 
         if (todo.getIsComplete()) { // false -> true 변경
             Optional<TodoEndManager> todoEndManager = todoEndManagerRepository.findByMember(member);
-            if (todoEndManager.isEmpty()) {
+            if (todoEndManager.isEmpty()) { // todoEndManager가 없을 경우
                 List<Todo> todoList = new ArrayList<>();
                 todoList.add(todo);
                 todo.setTodoEndManager(todoEndManagerRepository.save(todoAssembler.toTodoEndManagerEntity(member, todoList)));
                 todo.setFinishDate(LocalDateTime.now());
-            } else {
+            } else { // todoEndManager가 이미 만들어져있을 경우
                 TodoEndManager endManager = todoEndManager.get();
                 endManager.getTodoList().add(todo);
                 todo.setTodoEndManager(todoEndManagerRepository.save(endManager));
@@ -101,11 +101,8 @@ public class TodoService {
             }
         } else { //true -> false 변경
             TodoEndManager todoEndManager = todo.getTodoEndManager();
-            System.out.println("endManager.getTodoList() = " + todoEndManager.getTodoList());
 
             todoEndManager.getTodoList().remove(todo);
-            System.out.println("endManager.getTodoList() = " + todoEndManager.getTodoList());
-
             todo.setTodoEndManager(null);
             todo.setFinishDate(null);
             todoEndManagerRepository.save(todoEndManager);

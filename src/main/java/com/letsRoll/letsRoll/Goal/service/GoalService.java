@@ -7,7 +7,9 @@ import com.letsRoll.letsRoll.Comment_Feeling.entity.Comment;
 import com.letsRoll.letsRoll.Comment_Feeling.entity.Feeling;
 import com.letsRoll.letsRoll.Comment_Feeling.repository.CommentRepository;
 import com.letsRoll.letsRoll.Comment_Feeling.repository.FeelingRepository;
+import com.letsRoll.letsRoll.Goal.dto.GoalAssembler;
 import com.letsRoll.letsRoll.Goal.dto.req.GoalAddReq;
+import com.letsRoll.letsRoll.Goal.dto.res.CheckGoalAgree;
 import com.letsRoll.letsRoll.Goal.dto.res.GoalResDto;
 import com.letsRoll.letsRoll.Goal.dto.res.ReportGoalResDto;
 import com.letsRoll.letsRoll.Goal.dto.res.TimeLineResDto;
@@ -40,6 +42,7 @@ public class GoalService {
     private final CommentAssembler commentAssembler;
     private final FeelingRepository feelingRepository;
     private final TodoRepository todoRepository;
+    private final GoalAssembler goalAssembler;
     public void addGoal(Long projectId, GoalAddReq goalAddReq) {
 
         // 프로젝트 정보 가져오기
@@ -122,6 +125,17 @@ public class GoalService {
         return reportGoalResDtoList;
     }
 
+    public CheckGoalAgree checkGoalAgree(Long goalId) {
+        Goal goal = getGoal(goalId);
+        if (todoRepository.findTodosByGoalAndIsCompleteIsFalse(goal).isEmpty()) {
+            List<Member> notCheckMembers = goal.getGoalAgreeList().stream()
+                    .filter(goalAgree -> !goalAgree.getMemberCheck())
+                    .map(GoalAgree::getMember).toList();
+            return goalAssembler.checkGoalAgree(goal, notCheckMembers);
+        } else
+            throw new BaseException(BaseResponseCode.NOT_ALL_TODOS_COMPLETE);
+    }
+
     public Project getProject(Long projectId) {
         return projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_PROJECT));
@@ -131,4 +145,6 @@ public class GoalService {
         return goalRepository.findById(goalId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_GOAL));
     }
+
+
 }
