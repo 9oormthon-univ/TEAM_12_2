@@ -7,8 +7,8 @@ import com.letsRoll.letsRoll.Comment_Feeling.entity.Comment;
 import com.letsRoll.letsRoll.Comment_Feeling.entity.Feeling;
 import com.letsRoll.letsRoll.Comment_Feeling.repository.CommentRepository;
 import com.letsRoll.letsRoll.Comment_Feeling.repository.FeelingRepository;
-import com.letsRoll.letsRoll.Goal.dto.res.GoalResDto;
 import com.letsRoll.letsRoll.Goal.dto.req.GoalAddReq;
+import com.letsRoll.letsRoll.Goal.dto.res.GoalResDto;
 import com.letsRoll.letsRoll.Goal.dto.res.ReportGoalResDto;
 import com.letsRoll.letsRoll.Goal.dto.res.TimeLineResDto;
 import com.letsRoll.letsRoll.Goal.entity.Goal;
@@ -81,6 +81,7 @@ public class GoalService {
         }
     }
         goal.setIsComplete(true);
+        goal.setFinishDate(LocalDate.now());
         goalRepository.save(goal);
     }
     public TimeLineResDto getTimeLine(Long goalId) {
