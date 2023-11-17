@@ -23,4 +23,6 @@ public class GoalResDto {
     private boolean isComplete;
     private List<GoalAgreeMemberCheckResDto> goalAgreeList;
     private List<TodoListResDto> todoList;
+
+    private float progress;
 }

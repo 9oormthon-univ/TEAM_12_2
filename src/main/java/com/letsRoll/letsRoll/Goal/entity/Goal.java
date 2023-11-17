@@ -68,4 +68,16 @@ public class Goal extends BaseEntity {
         this.endDate = endDate;
     }
 
+    public float getProgress() {
+        if (todoList == null || todoList.isEmpty()) {
+            return 0.0f;
+        }
+
+        long completedGoals = todoList.stream()
+                .filter(Todo::getIsComplete)
+                .count();
+
+        return (float) completedGoals / todoList.size() * 100;
+    }
+
 }
