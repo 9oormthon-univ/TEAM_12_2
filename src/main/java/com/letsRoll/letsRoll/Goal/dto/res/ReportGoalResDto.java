@@ -19,17 +19,5 @@ public class ReportGoalResDto {
     private LocalDate endDate;
     private LocalDate finishDate;
     private boolean isComplete;
-
-    public static ReportGoalResDto toEntity(Project project, Goal goal) {
-        return ReportGoalResDto.builder()
-                .goalId(goal.getId())
-                .projectId(project.getId())
-                .title(goal.getTitle())
-                .startDate(goal.getStartDate())
-                .endDate(goal.getEndDate())
-                .finishDate(goal.getFinishDate())
-                .isComplete(goal.getIsComplete())
-                .build();
-    }
 }
 

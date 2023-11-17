@@ -23,32 +23,4 @@ public class GoalResDto {
     private boolean isComplete;
     private List<GoalAgreeMemberCheckResDto> goalAgreeList;
     private List<TodoListResDto> todoList;
-    public static GoalResDto fromEntity(Goal goal) {
-        GoalResDto goalDto = new GoalResDto();
-        goalDto.setProjectId(goal.getProject().getId());
-        goalDto.setGoalId(goal.getId());
-        goalDto.setTitle(goal.getTitle());
-        goalDto.setContent(goal.getContent());
-        goalDto.setStartDate(goal.getStartDate());
-        goalDto.setEndDate(goal.getEndDate());
-        goalDto.setComplete(goal.getIsComplete());
-
-        List<GoalAgree> goalAgreeList = goal.getGoalAgreeList();
-        if (goalAgreeList != null && !goalAgreeList.isEmpty()) {
-            goalDto.setGoalAgreeList(GoalAgreeMemberCheckResDto.fromEntities(goalAgreeList));
-        }
-
-        List<Todo> todoList = goal.getTodoList();
-        if (todoList != null && !todoList.isEmpty()) {
-            goalDto.setTodoList(TodoListResDto.fromEntities(todoList));
-        }
-
-        return goalDto;
-    }
-
-    public static List<GoalResDto> fromEntities(List<Goal> goals) {
-        return goals.stream()
-                .map(GoalResDto::fromEntity)
-                .collect(Collectors.toList());
-    }
 }

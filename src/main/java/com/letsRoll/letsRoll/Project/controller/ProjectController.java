@@ -5,6 +5,7 @@ import com.letsRoll.letsRoll.Member.dto.req.MemberAddReq;
 import com.letsRoll.letsRoll.Memoir.dto.req.MemoirAddReq;
 
 import com.letsRoll.letsRoll.Memoir.service.MemoirService;
+import com.letsRoll.letsRoll.Project.dto.ProjectAssembler;
 import com.letsRoll.letsRoll.Project.dto.req.ProjectStartReq;
 import com.letsRoll.letsRoll.Project.dto.res.ProjectResDto;
 import com.letsRoll.letsRoll.Project.entity.Project;
@@ -28,6 +29,7 @@ public class ProjectController {
     private final ProjectService projectService;
     private final ProjectRepository projectRepository;
     private final MemoirService memoirService;
+    private final ProjectAssembler projectAssembler;
 
     @PostMapping //프로젝트 등록
     public BaseResponse<Void> startProject(@RequestBody @Valid ProjectStartReq projectStartReq) {
@@ -39,7 +41,7 @@ public class ProjectController {
     public ResponseEntity<ProjectResDto> getProjectDetails(@PathVariable Long projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_PROJECT));
-        ProjectResDto projectDetails = ProjectResDto.fromEntity(project);
+        ProjectResDto projectDetails = projectAssembler.projectResDto(project);
         return new ResponseEntity<>(projectDetails, HttpStatus.OK);
     }
 

@@ -41,10 +41,13 @@ public class TodoService {
     public void addTodo(AddTodoReqDto addTodoReqDto) {
         Goal goal = getGoal((addTodoReqDto.getGoalId()));
         Member member = getMember((addTodoReqDto.getMemberId()));
+
         if (!goal.getProject().getMembers().contains(member)) {
             throw new BaseException(BaseResponseCode.NOT_PROJECT_MEMBER);
         }
+
         Optional<TodoManager> todoManagerOptional = todoManagerRepository.findByMember(member);
+
         if (todoManagerOptional.isEmpty()) {
             todoRepository.save(todoAssembler.toTodoEntity(goal, addTodoManager(member), addTodoReqDto.getContent(), addTodoReqDto.getEndDate()));
         } else {
@@ -55,8 +58,8 @@ public class TodoService {
     // TodoManager 추가
     public TodoManager addTodoManager(Member member) {
         TodoManager todoManager = todoAssembler.toTodoManagerEntity(member);
-        todoManagerRepository.save(todoManager);
-        return todoManager;
+
+        return todoManagerRepository.save(todoManager);
     }
 
     // 날짜에 따른 TodoList 조회
@@ -81,43 +84,46 @@ public class TodoService {
         return todoListResDto;
     }
 
+    // todo 완료 여부 벼경
     public void changeTodoComplete(Long todoId, Long memberId) {
         Todo todo = getTodo(todoId);
         todo.setIsComplete(!todo.getIsComplete());
+
         Member member = getMember(memberId);
 
         if (todo.getIsComplete()) { // false -> true 변경
             Optional<TodoEndManager> todoEndManager = todoEndManagerRepository.findByMember(member);
-            if (todoEndManager.isEmpty()) {
+
+            if (todoEndManager.isEmpty()) { // todoEndManager가 없을 경우
                 List<Todo> todoList = new ArrayList<>();
                 todoList.add(todo);
                 todo.setTodoEndManager(todoEndManagerRepository.save(todoAssembler.toTodoEndManagerEntity(member, todoList)));
                 todo.setFinishDate(LocalDateTime.now());
-            } else {
+            } else { // todoEndManager가 이미 만들어져있을 경우
                 TodoEndManager endManager = todoEndManager.get();
-                endManager.getTodoList().add(todo);
+                endManager.getTodoList().add(todo); // endManager의 todoList에 추가
                 todo.setTodoEndManager(todoEndManagerRepository.save(endManager));
                 todo.setFinishDate(LocalDateTime.now());
             }
         } else { //true -> false 변경
             TodoEndManager todoEndManager = todo.getTodoEndManager();
-            System.out.println("endManager.getTodoList() = " + todoEndManager.getTodoList());
-
             todoEndManager.getTodoList().remove(todo);
-            System.out.println("endManager.getTodoList() = " + todoEndManager.getTodoList());
 
             todo.setTodoEndManager(null);
             todo.setFinishDate(null);
+
             todoEndManagerRepository.save(todoEndManager);
         }
         todoRepository.save(todo);
     }
 
+    // 기한 지난 Todo있는지 체크
     public Boolean checkOverdueTodo() {
         List<Todo> todoList = todoRepository.findTodosByIsCompleteIsFalseAndEndDateLessThan(LocalDate.now());
         return !todoList.isEmpty();
     }
 
+    // 내게 할당된 Todo 조회
     public List<MyTodoResDto> getMyTodo(Long memberId) {
         Member member = getMember(memberId);
         TodoManager todoManager = todoManagerRepository.findByMember(member)
@@ -131,24 +137,11 @@ public class TodoService {
         return myTodoResDtoList;
     }
 
-    public Goal getGoal(Long goalId) {
-        return goalRepository.findById(goalId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_GOAL));
-    }
-
-    public Todo getTodo(Long todoId) {
-        return todoRepository.findTodoById(todoId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_TODO));
-    }
-
-    public Member getMember(Long memberId) {
-        return memberRepository.findMemberById(memberId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_MEMBER));
-    }
-
+    // 월별 Todo 완료/미완료 날짜 조회
     public MonthlyCheckTodoListResDto getMonthlyTodo(String yearMonth) {
         int year = Integer.parseInt(yearMonth.split("-")[0]);
         int month = Integer.parseInt(yearMonth.split("-")[1]);
+
         List<LocalDate> completeDate = todoRepository.findCompleteDate(year, month);
         List<LocalDate> inCompleteDate = todoRepository.findInCompleteDate(year, month);
 
@@ -157,12 +150,14 @@ public class TodoService {
 
     public List<TodoListResDto> getTodoListByGoal(Long goalId) {
         Goal goal = getGoal(goalId);
+
         List<TodoListResDto> todoListResDto = new ArrayList<>();
         List<Todo> todoList = todoRepository.findTodosByGoalOrderByCreatedDate(goal);
 
         for (Todo todo : todoList) {
             todoListResDto.add(todoAssembler.toDateTodoListResDtoEntity(todo));
         }
+
         return todoListResDto;
     }
 
@@ -194,5 +189,20 @@ public class TodoService {
                 .todoCount(allCount)
                 .reportTodoList(reportTodoList).build();
 
+    }
+
+    public Goal getGoal(Long goalId) {
+        return goalRepository.findById(goalId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_GOAL));
+    }
+
+    public Todo getTodo(Long todoId) {
+        return todoRepository.findTodoById(todoId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_TODO));
+    }
+
+    public Member getMember(Long memberId) {
+        return memberRepository.findMemberById(memberId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_MEMBER));
     }
 }

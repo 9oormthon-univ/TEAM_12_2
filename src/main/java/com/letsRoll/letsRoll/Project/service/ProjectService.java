@@ -1,5 +1,6 @@
 package com.letsRoll.letsRoll.Project.service;
 
+import com.letsRoll.letsRoll.Goal.dto.GoalAssembler;
 import com.letsRoll.letsRoll.Goal.dto.res.GoalResDto;
 import com.letsRoll.letsRoll.Goal.entity.Goal;
 import com.letsRoll.letsRoll.Goal.entity.GoalAgree;
@@ -90,7 +91,7 @@ public class ProjectService {
         List<Goal> goals = goalRepository.findByProject_Id(projectId);
 
         return goals.stream()
-                .map(GoalResDto::fromEntity)
+                .map(GoalAssembler::fromEntity)
                 .collect(Collectors.toList());
     }
 

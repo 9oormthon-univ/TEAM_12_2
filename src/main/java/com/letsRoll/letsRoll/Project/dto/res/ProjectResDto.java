@@ -1,5 +1,6 @@
 package com.letsRoll.letsRoll.Project.dto.res;
 
+import com.letsRoll.letsRoll.Goal.dto.GoalAssembler;
 import com.letsRoll.letsRoll.Goal.dto.res.GoalResDto;
 import com.letsRoll.letsRoll.Member.dto.res.MemberResDto;
 import com.letsRoll.letsRoll.Memoir.dto.res.MemoirResDto;
@@ -27,19 +28,4 @@ public class ProjectResDto {
 
     private float progress;
 
-    public static ProjectResDto fromEntity(Project project) {
-        ProjectResDto projectDto = new ProjectResDto();
-        projectDto.setProjectId(project.getId());
-        projectDto.setTitle(project.getTitle());
-        projectDto.setDescription(project.getDescription());
-        projectDto.setPassword(project.getPassword());
-        projectDto.setMode(project.getMode());
-        projectDto.setStartDate(project.getStartDate());
-        projectDto.setFinishDate(project.getFinishDate());
-        projectDto.setEndDate(project.getEndDate());
-        projectDto.setGoals(GoalResDto.fromEntities(project.getGoals()));
-        projectDto.setMembers(MemberResDto.fromEntities(project.getMembers()));
-        projectDto.setProgress(project.getProgress());
-        return projectDto;
-    }
 }

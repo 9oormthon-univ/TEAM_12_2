@@ -39,24 +39,28 @@ public class CommentService {
     private final FeelingRepository feelingRepository;
     private final FeelingAssembler feelingAssembler;
 
+    //comment 추가
     public void addComment(CommentReqDto commentReqDto, String type) {
         Goal goal = goalRepository.findGoalByIdAndIsComplete(commentReqDto.getGoalId(), false)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_GOAL));
+
         Member member = getMember(commentReqDto.getMemberId());
-        switch (type){
+
+        switch (type){ // type별 comment 저장
             case "GOAL" ->
                     commentRepository.save(commentAssembler.toCommentEntity(goal, member, commentReqDto.getContent()));
             case "TODO" -> {
-                Todo todo = todoRepository.findTodoById(commentReqDto.getTodoId())
-                        .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_TODO));
+                Todo todo = getTodo(commentReqDto.getTodoId());
                 commentRepository.save(commentAssembler.toCommentEntity(goal, todo, member, commentReqDto.getContent()));
             }
         }
     }
+    // todo별 Comment 조회
     public TodoCommentResDto getTodoComment(Long todoId) {
         Todo todo = getTodo(todoId);
         List<Comment> commentList = commentRepository.findAllByGoalAndTodoAndTypeOrderByCreatedDateAsc(todo.getGoal(), todo, CommentType.TODO);
         List<CommentInfoDto> commentDtoList = new ArrayList<>();
+
         for (Comment comment : commentList) {
             List<Feeling> feelingList = feelingRepository.findAllByComment(comment);
 
@@ -69,6 +73,7 @@ public class CommentService {
         return commentAssembler.toTodoCommentResDtoEntity(todo, commentDtoList);
     }
 
+    // goalComment에 이모지 추가
     public void addGoalCommentFeeling(Long goalId, Long commentId, GoalFeelingReqDto goalFeelingReqDto) {
         Goal goal = getGoal(goalId);
         Comment comment = commentRepository.findCommentByIdAndGoalAndType(commentId, goal, CommentType.GOAL)
@@ -77,7 +82,7 @@ public class CommentService {
         Emoji emoji = isEmoji(goalFeelingReqDto.getEmoji());
         checkAlreadyExistFeeling(comment, member, emoji);
     }
-
+    // todoComment에 이모지 추가
     public void addTodoCommentFeeling(Long todoId, Long commentId, TodoFeelingReqDto todoFeelingReqDto) {
         Todo todo = getTodo(todoId);
         Comment comment = commentRepository.findCommentByIdAndTodoAndType(commentId, todo, CommentType.TODO)
@@ -86,6 +91,7 @@ public class CommentService {
         checkAlreadyExistFeeling(comment, member, Emoji.HEART);
     }
 
+    // 이미 이모지가 추가되어있는지 체크
     public void checkAlreadyExistFeeling(Comment comment, Member member, Emoji emoji) {
         Optional<Feeling> optionalFeeling = feelingRepository.findFeelingByCommentAndMember(comment, member);
         if (optionalFeeling.isPresent()) {
@@ -101,22 +107,9 @@ public class CommentService {
         }
     }
 
-    public Goal getGoal(Long goalId) {
-        return goalRepository.findById(goalId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_GOAL));
-    }
-
-    public Todo getTodo(Long todoId) {
-        return todoRepository.findTodoById(todoId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_TODO));
-    }
-
-    public Member getMember(Long memberId) {
-        return memberRepository.findMemberById(memberId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_MEMBER));
-    }
-
+    //이모지 type으로 변환
     public Emoji isEmoji(String emoji) {
+
         if (emoji==null) {
             throw new BaseException(BaseResponseCode.CONTENT_NULL);
         }
@@ -138,5 +131,20 @@ public class CommentService {
             }
             default -> throw new BaseException(BaseResponseCode.BAD_REQUEST);
         }
+    }
+
+    public Goal getGoal(Long goalId) {
+        return goalRepository.findById(goalId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_GOAL));
+    }
+
+    public Todo getTodo(Long todoId) {
+        return todoRepository.findTodoById(todoId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_TODO));
+    }
+
+    public Member getMember(Long memberId) {
+        return memberRepository.findMemberById(memberId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_MEMBER));
     }
 }

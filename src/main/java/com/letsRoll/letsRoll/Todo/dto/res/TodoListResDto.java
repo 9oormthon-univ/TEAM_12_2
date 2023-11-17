@@ -24,7 +24,8 @@ public class TodoListResDto {
     private LocalDate todoEndDate;
 
     @Builder
-    public TodoListResDto(Long goalId, String goalContent, Long todoId, String todoContent, Long todoManagerMemberId, String todoManagerNickName, Boolean isComplete, LocalDate todoEndDate) {
+    public TodoListResDto(Long goalId, String goalContent, Long todoId, String todoContent, Long todoManagerMemberId,
+                          String todoManagerNickName, Boolean isComplete, LocalDate todoEndDate) {
         this.goalId = goalId;
         this.goalContent = goalContent;
         this.todoId = todoId;
