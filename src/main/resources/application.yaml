@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://lets-rolldb.cic2upy9gfyn.ap-northeast-2.rds.amazonaws.com:3306/lets_roll?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: letsRoll
+
+  jpa:
+    database: mysql
+    show-sql: true
+#    hibernate:
+#      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        hbm2ddl:
+          auto: update
+
+  profiles:
+    include: secret
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
