@@ -12,6 +12,13 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findMemberById(Long memberId);
+
+
+    List<Member> findMemberByProject(Project project);
+
+    Optional<Member> findMemberByProjectAndUserId(Project project, Long userId);
+
     List<Member> findByProject(Project project);
     List<Member> findMembersByUser(User user);
+
 }
