@@ -23,7 +23,3 @@ spring:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
-
-server:
-  port: 8081
-  url: localhost
