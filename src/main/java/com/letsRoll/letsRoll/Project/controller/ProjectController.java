@@ -3,13 +3,12 @@ package com.letsRoll.letsRoll.Project.controller;
 import com.letsRoll.letsRoll.Goal.dto.res.GoalResDto;
 import com.letsRoll.letsRoll.Member.dto.req.MemberAddReq;
 import com.letsRoll.letsRoll.Memoir.dto.req.MemoirAddReq;
-
 import com.letsRoll.letsRoll.Memoir.service.MemoirService;
 import com.letsRoll.letsRoll.Project.dto.ProjectAssembler;
 import com.letsRoll.letsRoll.Project.dto.req.ProjectStartReq;
 import com.letsRoll.letsRoll.Project.dto.res.FinishProjectResDto;
-import com.letsRoll.letsRoll.Project.dto.res.ProjectResDto;
 import com.letsRoll.letsRoll.Project.dto.res.InProgressProjectResDto;
+import com.letsRoll.letsRoll.Project.dto.res.ProjectResDto;
 import com.letsRoll.letsRoll.Project.dto.res.StartProjectResDto;
 import com.letsRoll.letsRoll.Project.entity.Project;
 import com.letsRoll.letsRoll.Project.repository.ProjectRepository;
@@ -40,12 +39,11 @@ public class ProjectController {
     }
 
     @GetMapping("/{projectId}")
-    public ResponseEntity<ProjectResDto> getProjectDetails(@PathVariable Long projectId) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_PROJECT));
-        ProjectResDto projectDetails = projectAssembler.projectResDto(project);
-        return new ResponseEntity<>(projectDetails, HttpStatus.OK);
+    public BaseResponse<ProjectResDto> getProjectDetails(@PathVariable Long projectId, @RequestParam Long userId) {
+
+        return new BaseResponse<>(projectService.getProjectDetails(projectId, userId));
     }
+
 
 
     @GetMapping("/{projectId}/goals")

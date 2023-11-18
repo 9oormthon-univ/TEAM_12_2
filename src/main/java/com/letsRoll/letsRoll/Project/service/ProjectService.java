@@ -6,6 +6,7 @@ import com.letsRoll.letsRoll.Goal.entity.Goal;
 import com.letsRoll.letsRoll.Goal.entity.GoalAgree;
 import com.letsRoll.letsRoll.Goal.repository.GoalAgreeRepository;
 import com.letsRoll.letsRoll.Goal.repository.GoalRepository;
+import com.letsRoll.letsRoll.Goal.service.GoalService;
 import com.letsRoll.letsRoll.Member.dto.req.MemberAddReq;
 import com.letsRoll.letsRoll.Member.entity.Member;
 import com.letsRoll.letsRoll.Member.repository.MemberRepository;
@@ -16,6 +17,7 @@ import com.letsRoll.letsRoll.Project.dto.ProjectAssembler;
 import com.letsRoll.letsRoll.Project.dto.req.ProjectStartReq;
 import com.letsRoll.letsRoll.Project.dto.res.FinishProjectResDto;
 import com.letsRoll.letsRoll.Project.dto.res.InProgressProjectResDto;
+import com.letsRoll.letsRoll.Project.dto.res.ProjectResDto;
 import com.letsRoll.letsRoll.Project.dto.res.StartProjectResDto;
 import com.letsRoll.letsRoll.Project.entity.Project;
 import com.letsRoll.letsRoll.Project.repository.ProjectRepository;
@@ -29,13 +31,14 @@ import com.letsRoll.letsRoll.global.exception.BaseException;
 import com.letsRoll.letsRoll.global.exception.BaseResponseCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -94,7 +97,6 @@ public class ProjectService {
 
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_PROJECT));
-       Project project = getProject(projectId);
 
 
         String password = memberAddReq.getPassword();
@@ -199,4 +201,14 @@ public class ProjectService {
         }
         return finishProjectResDtos;
     }
+
+    public ProjectResDto getProjectDetails(Long projectId, Long userId) {
+        Project project = getProject(projectId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_USER));
+        Optional<Member> member = memberRepository.findByProjectAndUser(project, user);
+
+        return member.map(value -> projectAssembler.projectResDto(project, value)).orElseGet(() -> projectAssembler.projectResDto(project));
+    }
+
 }

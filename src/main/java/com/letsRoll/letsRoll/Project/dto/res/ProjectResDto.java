@@ -25,7 +25,7 @@ public class ProjectResDto {
     private LocalDate endDate;
     private List<GoalResDto> goals;
     private List<MemberResDto> members;
-
+    private Long memberId = null;
     private float progress;
 
 }
