@@ -71,12 +71,12 @@ public class ProjectController {
     }
 
     @GetMapping("/myproject")
-    public BaseResponse<List<InProgressProjectResDto>> myProjectList(@RequestBody @Valid UserIdReqDto userIdReqDto) {
-        return new BaseResponse<>(projectService.myProjectList(userIdReqDto));
+    public BaseResponse<List<InProgressProjectResDto>> myProjectList(@RequestParam Long userId) {
+        return new BaseResponse<>(projectService.myProjectList(userId));
     }
 
     @GetMapping("/end")
-    public BaseResponse<List<FinishProjectResDto>> endProjectList(@RequestBody @Valid UserIdReqDto userIdReqDto) {
-        return new BaseResponse<>(projectService.endProjectList(userIdReqDto));
+    public BaseResponse<List<FinishProjectResDto>> endProjectList(@RequestParam Long userId) {
+        return new BaseResponse<>(projectService.endProjectList(userId));
     }
 }
