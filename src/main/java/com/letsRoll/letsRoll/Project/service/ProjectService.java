@@ -97,7 +97,6 @@ public class ProjectService {
 
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_PROJECT));
-       Project project = getProject(projectId);
 
 
         String password = memberAddReq.getPassword();
@@ -204,7 +203,7 @@ public class ProjectService {
     }
 
     public ProjectResDto getProjectDetails(Long projectId, Long userId) {
-        Project project = getProjects(projectId);
+        Project project = getProject(projectId);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_USER));
         Optional<Member> member = memberRepository.findByProjectAndUser(project, user);
