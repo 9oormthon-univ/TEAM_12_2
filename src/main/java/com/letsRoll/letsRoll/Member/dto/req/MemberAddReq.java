@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class MemberAddReq{
-
+    private Long userId;
     private String nickname;
     private String role;
     private String password;
