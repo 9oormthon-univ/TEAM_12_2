@@ -14,6 +14,7 @@ import com.letsRoll.letsRoll.Memoir.entity.Memoir;
 import com.letsRoll.letsRoll.Memoir.repository.MemoirRepository;
 import com.letsRoll.letsRoll.Project.dto.ProjectAssembler;
 import com.letsRoll.letsRoll.Project.dto.req.ProjectStartReq;
+import com.letsRoll.letsRoll.Project.dto.res.FinishProjectResDto;
 import com.letsRoll.letsRoll.Project.dto.res.InProgressProjectResDto;
 import com.letsRoll.letsRoll.Project.dto.res.StartProjectResDto;
 import com.letsRoll.letsRoll.Project.entity.Project;
@@ -189,5 +190,18 @@ public class ProjectService {
                 inProgressProjectResDtos.add(projectAssembler.inProgressProjectResDto(project));
         }
         return inProgressProjectResDtos;
+    }
+
+    public List<FinishProjectResDto> endProjectList(UserIdReqDto userIdReqDto) {
+        User user = userRepository.findUserById(userIdReqDto.getUserId())
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_USER));
+        List<Member> members = memberRepository.findMembersByUser(user);
+        List<FinishProjectResDto> finishProjectResDtos = new ArrayList<>();
+        for (Member member : members) {
+            Project project = member.getProject();
+            if(project.getFinishDate()==null)
+                finishProjectResDtos.add(projectAssembler.finishProjectResDto(project));
+        }
+        return finishProjectResDtos;
     }
 }

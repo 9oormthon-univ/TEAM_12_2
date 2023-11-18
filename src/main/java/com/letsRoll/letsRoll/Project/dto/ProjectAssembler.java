@@ -2,6 +2,7 @@ package com.letsRoll.letsRoll.Project.dto;
 
 import com.letsRoll.letsRoll.Goal.dto.GoalAssembler;
 import com.letsRoll.letsRoll.Member.dto.MemberAssembler;
+import com.letsRoll.letsRoll.Project.dto.res.FinishProjectResDto;
 import com.letsRoll.letsRoll.Project.dto.res.InProgressProjectResDto;
 import com.letsRoll.letsRoll.Project.dto.res.ProjectResDto;
 import com.letsRoll.letsRoll.Project.entity.Project;
@@ -48,6 +49,13 @@ public class ProjectAssembler {
                 .projectTitle(project.getTitle())
                 .description(project.getDescription())
                 .progress(project.getProgress())
+                .build();
+    }
+    public FinishProjectResDto finishProjectResDto(Project project) {
+        return FinishProjectResDto.builder()
+                .projectId(project.getId())
+                .projectTitle(project.getTitle())
+                .description(project.getDescription())
                 .build();
     }
 }
