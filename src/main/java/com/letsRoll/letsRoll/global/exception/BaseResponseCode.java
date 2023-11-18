@@ -19,6 +19,8 @@ public enum BaseResponseCode {
     BAD_REQUEST("GL003", HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     CONTENT_NULL("GL004", HttpStatus.BAD_REQUEST, "내용을 입력해 주세요."),
 
+    NOT_FOUND_TOKEN("GL005", HttpStatus.NOT_FOUND, "토큰이 존재하지 않습니다"),
+    EXPIRED_TOKEN("GL006", HttpStatus.GATEWAY_TIMEOUT, "토큰의 기한이 지났습니다"),
     // user
     ALREADY_EXIST_USER("U0001", HttpStatus.CONFLICT, "이미 존재하는 USER입니다"),
     WRONG_PASSWORD("U0002", HttpStatus.BAD_REQUEST, "비밀번호가 틀렸습니다."),

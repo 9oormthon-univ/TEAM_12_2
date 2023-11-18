@@ -34,7 +34,4 @@ out/
 
 ### VS Code ###
 .vscode/
-
-
-/src/main/resources/application.yaml
 /umc5-test-keypair.pem

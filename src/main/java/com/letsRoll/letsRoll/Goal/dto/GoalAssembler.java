@@ -64,6 +64,7 @@ public class GoalAssembler {
         goalDto.setStartDate(goal.getStartDate());
         goalDto.setEndDate(goal.getEndDate());
         goalDto.setComplete(goal.getIsComplete());
+        goalDto.setProgress(goal.getProgress());
 
         List<GoalAgree> goalAgreeList = goal.getGoalAgreeList();
         if (goalAgreeList != null && !goalAgreeList.isEmpty()) {

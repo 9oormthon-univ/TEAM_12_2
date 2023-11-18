@@ -23,19 +23,13 @@ public class MemoirAssembler {
         MemoirResDto memoirDto = new MemoirResDto();
         memoirDto.setId(memoir.getId());
 
-        // Member 엔티티를 MemberResDto로 변환
+        // Member 엔티티를 MemberResDto의 닉네임 추출하도록 변경
         MemberResDto memberResDto = MemberAssembler.fromEntity(memoir.getMember());
-        memoirDto.setMember(memberResDto);
+        memoirDto.setMember(memberResDto.getNickname());
 
         memoirDto.setContent(memoir.getContent());
 
-        // Project 엔티티를 ProjectResDto로 변환
-        Project project = memoir.getMember().getProject();
-        ProjectResDto projectResDto = new ProjectResDto();
-        projectResDto.setProjectId(project.getId());
-        projectResDto.setTitle(project.getTitle());
-
-        memoirDto.setProject(projectResDto);
+        memoirDto.setUpdatedAt(memoir.getUpdatedDate());
 
         return memoirDto;
     }
