@@ -23,8 +23,9 @@ public class SecurityConfig {
                 registry.addMapping("/api/**")
                         .allowedOriginPatterns("http://localhost:5173")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
-                        .exposedHeaders("Authorization", "RefreshToken")
-                        .allowCredentials(true);
+                        .allowedHeaders("*")
+                        .allowCredentials(false);
+
             }
         };
     }

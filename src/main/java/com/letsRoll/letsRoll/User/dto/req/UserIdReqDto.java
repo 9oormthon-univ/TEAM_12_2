@@ -1,20 +1,14 @@
-package com.letsRoll.letsRoll.Member.dto.req;
+package com.letsRoll.letsRoll.User.dto.req;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MemberAddReq{
+public class UserIdReqDto {
     private Long userId;
-    private String nickname;
-    private String role;
-    private String password;
-
 }
