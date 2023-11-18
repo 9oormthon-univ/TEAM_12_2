@@ -164,7 +164,7 @@ public class TodoService {
     public AllReportTodo getReportTodo(Long projectId) {
         Project project = projectRepository.findProjectById(projectId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_PROJECT));
-        List<Member> members = memberRepository.findByProject(project);
+        List<Member> members = memberRepository.findMemberByProject(project);
         System.out.println("project = " + project.getId());
         System.out.println("members = " + members);
         int completeCount;

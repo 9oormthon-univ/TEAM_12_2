@@ -16,4 +16,5 @@ public class GoalAddReq {
     private String content;
     private LocalDate startDate;
     private LocalDate endDate;
+    private Long userId;
 }

@@ -86,7 +86,14 @@ public class ProjectService {
     }
 
     public void addMemberToProject(Long projectId, @Valid MemberAddReq memberAddReq) {
-        Project project = getProject(projectId);
+
+        User user = userRepository.findUserById(memberAddReq.getUserId())
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_USER));
+
+
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_PROJECT));
+       Project project = getProject(projectId);
 
 
         String password = memberAddReq.getPassword();
@@ -94,25 +101,13 @@ public class ProjectService {
             throw new BaseException(BaseResponseCode.WRONG_PROJECT_PASSWORD);
         }
 
-        // 임시 사용자 데이터 생성
-        UserSignUpReq tempUserReq = UserSignUpReq.builder()
-                .userName("testUser2")
-                .password("testPassword2")
-                .build();
-
-        // UserRepository를 통해 데이터베이스에 저장
-        User tempUser = User.builder()
-                .userName(tempUserReq.getUserName())
-                .password(tempUserReq.getPassword())
-                .build();
-        userRepository.save(tempUser);
 
         String nickname = memberAddReq.getNickname();
         String role = memberAddReq.getRole();
 
         Member member = Member.builder()
                 .project(project)
-                .user(tempUser)
+                .user(user)
                 .nickname(nickname)
                 .role(role)
                 .build();
@@ -120,14 +115,14 @@ public class ProjectService {
         memberRepository.save(member);
 
         // 프로젝트의 각 Goal에 대해 GoalAgree 생성 또는 가져오기
-        for (Goal goal : project.getGoals()) {
-            GoalAgree goalAgree = goalAgreeRepository.findByGoalAndMember(goal, member)
-                    .orElse(new GoalAgree(goal, member));
+        List<Goal> goals = project.getGoals();
+        for (Goal goal : goals) {
+            GoalAgree goalAgree = GoalAgree.builder()
+                            .goal(goal)
+                            .member(member)
+                            .build();
 
-            // 만약 GoalAgree가 새로 생성되었다면 저장
-            if (!goalAgreeRepository.existsByGoalAndMember(goal, member)) {
-                goalAgreeRepository.save(goalAgree);
-            }
+            goalAgreeRepository.save(goalAgree);
         }
     }
 

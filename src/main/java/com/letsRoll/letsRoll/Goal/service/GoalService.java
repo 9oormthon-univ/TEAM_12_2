@@ -18,6 +18,7 @@ import com.letsRoll.letsRoll.Goal.entity.GoalAgree;
 import com.letsRoll.letsRoll.Goal.repository.GoalAgreeRepository;
 import com.letsRoll.letsRoll.Goal.repository.GoalRepository;
 import com.letsRoll.letsRoll.Member.entity.Member;
+import com.letsRoll.letsRoll.Member.repository.MemberRepository;
 import com.letsRoll.letsRoll.Project.entity.Project;
 import com.letsRoll.letsRoll.Project.repository.ProjectRepository;
 import com.letsRoll.letsRoll.Todo.entity.Todo;
@@ -43,11 +44,20 @@ public class GoalService {
     private final FeelingRepository feelingRepository;
     private final TodoRepository todoRepository;
     private final GoalAssembler goalAssembler;
+    private final MemberRepository memberRepository;
 
     public void addGoal(Long projectId, GoalAddReq goalAddReq) {
 
+
         // 프로젝트 정보 가져오기
         Project project = getProject(projectId);
+        // 요청한 user와 project에 대해 member 정보 가져오기
+        Member mem = memberRepository.findMemberByProjectAndUserId(project,goalAddReq.getUserId())
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_MEMBER));
+        if(!project.getMembers().contains(mem)) {
+            throw new BaseException(BaseResponseCode.NOT_FOUND_MEMBER);
+        }
+
         Goal goal = goalRepository.save(goalAssembler.goal(goalAddReq, project));
 
         for (Member member : project.getMembers()) {
