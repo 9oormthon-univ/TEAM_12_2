@@ -27,9 +27,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProjectController {
     private final ProjectService projectService;
-    private final ProjectRepository projectRepository;
-    private final MemoirService memoirService;
-    private final ProjectAssembler projectAssembler;
 
     @PostMapping //프로젝트 등록
     public BaseResponse<Void> startProject(@RequestBody @Valid ProjectStartReq projectStartReq) {
@@ -38,11 +35,9 @@ public class ProjectController {
     }
 
     @GetMapping("/{projectId}")
-    public ResponseEntity<ProjectResDto> getProjectDetails(@PathVariable Long projectId) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_PROJECT));
-        ProjectResDto projectDetails = projectAssembler.projectResDto(project);
-        return new ResponseEntity<>(projectDetails, HttpStatus.OK);
+    public BaseResponse<ProjectResDto> getProjectDetails(@PathVariable Long projectId, @RequestParam Long userId) {
+
+        return new BaseResponse<>(projectService.getProjectDetails(projectId, userId));
     }
 
 

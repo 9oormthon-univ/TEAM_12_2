@@ -6,14 +6,15 @@ import com.letsRoll.letsRoll.Goal.entity.Goal;
 import com.letsRoll.letsRoll.Goal.entity.GoalAgree;
 import com.letsRoll.letsRoll.Goal.repository.GoalAgreeRepository;
 import com.letsRoll.letsRoll.Goal.repository.GoalRepository;
-import com.letsRoll.letsRoll.Goal.service.GoalService;
 import com.letsRoll.letsRoll.Member.dto.req.MemberAddReq;
 import com.letsRoll.letsRoll.Member.entity.Member;
 import com.letsRoll.letsRoll.Member.repository.MemberRepository;
 import com.letsRoll.letsRoll.Memoir.dto.req.MemoirAddReq;
 import com.letsRoll.letsRoll.Memoir.entity.Memoir;
 import com.letsRoll.letsRoll.Memoir.repository.MemoirRepository;
+import com.letsRoll.letsRoll.Project.dto.ProjectAssembler;
 import com.letsRoll.letsRoll.Project.dto.req.ProjectStartReq;
+import com.letsRoll.letsRoll.Project.dto.res.ProjectResDto;
 import com.letsRoll.letsRoll.Project.entity.Project;
 import com.letsRoll.letsRoll.Project.repository.ProjectRepository;
 import com.letsRoll.letsRoll.User.dto.req.UserSignUpReq;
@@ -31,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,8 +40,6 @@ import java.util.stream.Collectors;
 public class ProjectService {
     @Autowired
     private final ProjectRepository projectRepository;
-    @Autowired
-    private final GoalService goalService;
     @Autowired
     private final GoalRepository goalRepository;
     @Autowired
@@ -50,6 +50,8 @@ public class ProjectService {
     private final MemoirRepository memoirRepository;
     @Autowired
     private final GoalAgreeRepository goalAgreeRepository;
+    private final ProjectAssembler projectAssembler;
+
 
     public void setFinishDateIfGoalsCompleted(Project project) {
         boolean allGoalsCompleted = project.getGoals().stream().allMatch(Goal::getIsComplete);
@@ -144,8 +146,8 @@ public class ProjectService {
         }
     }
 
-    public void getProjects(Long projectId) {
-        Project project = projectRepository.findById(projectId)
+    public Project getProjects(Long projectId) {
+        return projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_PROJECT));
     }
 
@@ -190,4 +192,14 @@ public class ProjectService {
 
         memoirRepository.save(memoir);
     }
+
+    public ProjectResDto getProjectDetails(Long projectId, Long userId) {
+        Project project = getProjects(projectId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_USER));
+        Optional<Member> member = memberRepository.findByProjectAndUser(project, user);
+
+        return member.map(value -> projectAssembler.projectResDto(project, value)).orElseGet(() -> projectAssembler.projectResDto(project));
+    }
+
 }
