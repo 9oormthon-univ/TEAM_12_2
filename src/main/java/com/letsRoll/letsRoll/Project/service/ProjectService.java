@@ -176,8 +176,8 @@ public class ProjectService {
         memoirRepository.save(memoir);
     }
 
-    public List<InProgressProjectResDto> myProjectList(UserIdReqDto userIdReqDto) {
-        User user = userRepository.findUserById(userIdReqDto.getUserId())
+    public List<InProgressProjectResDto> myProjectList(Long userId) {
+        User user = userRepository.findUserById(userId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_USER));
         List<Member> members = memberRepository.findMembersByUser(user);
         List<InProgressProjectResDto> inProgressProjectResDtos = new ArrayList<>();
@@ -189,8 +189,8 @@ public class ProjectService {
         return inProgressProjectResDtos;
     }
 
-    public List<FinishProjectResDto> endProjectList(UserIdReqDto userIdReqDto) {
-        User user = userRepository.findUserById(userIdReqDto.getUserId())
+    public List<FinishProjectResDto> endProjectList(Long userId) {
+        User user = userRepository.findUserById(userId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_USER));
         List<Member> members = memberRepository.findMembersByUser(user);
         List<FinishProjectResDto> finishProjectResDtos = new ArrayList<>();
