@@ -6,16 +6,19 @@ import com.letsRoll.letsRoll.Goal.entity.Goal;
 import com.letsRoll.letsRoll.Goal.entity.GoalAgree;
 import com.letsRoll.letsRoll.Goal.repository.GoalAgreeRepository;
 import com.letsRoll.letsRoll.Goal.repository.GoalRepository;
-import com.letsRoll.letsRoll.Goal.service.GoalService;
 import com.letsRoll.letsRoll.Member.dto.req.MemberAddReq;
 import com.letsRoll.letsRoll.Member.entity.Member;
 import com.letsRoll.letsRoll.Member.repository.MemberRepository;
 import com.letsRoll.letsRoll.Memoir.dto.req.MemoirAddReq;
 import com.letsRoll.letsRoll.Memoir.entity.Memoir;
 import com.letsRoll.letsRoll.Memoir.repository.MemoirRepository;
+import com.letsRoll.letsRoll.Project.dto.ProjectAssembler;
 import com.letsRoll.letsRoll.Project.dto.req.ProjectStartReq;
+import com.letsRoll.letsRoll.Project.dto.res.InProgressProjectResDto;
+import com.letsRoll.letsRoll.Project.dto.res.StartProjectResDto;
 import com.letsRoll.letsRoll.Project.entity.Project;
 import com.letsRoll.letsRoll.Project.repository.ProjectRepository;
+import com.letsRoll.letsRoll.User.dto.req.UserIdReqDto;
 import com.letsRoll.letsRoll.User.dto.req.UserSignUpReq;
 import com.letsRoll.letsRoll.User.entity.User;
 import com.letsRoll.letsRoll.User.repository.UserRepository;
@@ -25,31 +28,25 @@ import com.letsRoll.letsRoll.global.exception.BaseException;
 import com.letsRoll.letsRoll.global.exception.BaseResponseCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
-    @Autowired
     private final ProjectRepository projectRepository;
-    @Autowired
-    private final GoalService goalService;
-    @Autowired
     private final GoalRepository goalRepository;
-    @Autowired
     private final MemberRepository memberRepository;
-    @Autowired
     private final UserRepository userRepository;
-    @Autowired
     private final MemoirRepository memoirRepository;
-    @Autowired
     private final GoalAgreeRepository goalAgreeRepository;
+    private final ProjectAssembler projectAssembler;
 
     public void setFinishDateIfGoalsCompleted(Project project) {
         boolean allGoalsCompleted = project.getGoals().stream().allMatch(Goal::getIsComplete);
@@ -65,7 +62,7 @@ public class ProjectService {
 
 
     @Transactional
-    public void startProject(ProjectStartReq projectStartReq) {
+    public StartProjectResDto startProject(ProjectStartReq projectStartReq) {
         // ProjectStartReq로부터 필요한 정보 추출
         String title = projectStartReq.getTitle();
         String description = projectStartReq.getDescription();
@@ -74,17 +71,10 @@ public class ProjectService {
         LocalDate startDate = projectStartReq.getStartDate();
         LocalDate endDate = projectStartReq.getEndDate();
 
-        Project project = Project.builder()
-                .title(title)
-                .description(description)
-                .password(password)
-                .mode(mode)
-                .startDate(startDate)
-                .endDate(endDate)
-                .build();
-
+        Project project = projectAssembler.project(title, description, password, mode, startDate, endDate);
 
         projectRepository.save(project);
+        return StartProjectResDto.builder().projectId(project.getId()).build();
     }
 
     public List<GoalResDto> getGoalsForProject(Long projectId) {
@@ -96,8 +86,7 @@ public class ProjectService {
     }
 
     public void addMemberToProject(Long projectId, @Valid MemberAddReq memberAddReq) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_PROJECT));
+        Project project = getProject(projectId);
 
 
         String password = memberAddReq.getPassword();
@@ -130,8 +119,6 @@ public class ProjectService {
 
         memberRepository.save(member);
 
-        memberRepository.save(member);
-
         // 프로젝트의 각 Goal에 대해 GoalAgree 생성 또는 가져오기
         for (Goal goal : project.getGoals()) {
             GoalAgree goalAgree = goalAgreeRepository.findByGoalAndMember(goal, member)
@@ -144,8 +131,8 @@ public class ProjectService {
         }
     }
 
-    public void getProjects(Long projectId) {
-        Project project = projectRepository.findById(projectId)
+    public Project getProject(Long projectId) {
+        return projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_PROJECT));
     }
 
@@ -189,5 +176,18 @@ public class ProjectService {
                 .build();
 
         memoirRepository.save(memoir);
+    }
+
+    public List<InProgressProjectResDto> myProjectList(UserIdReqDto userIdReqDto) {
+        User user = userRepository.findUserById(userIdReqDto.getUserId())
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_USER));
+        List<Member> members = memberRepository.findMembersByUser(user);
+        List<InProgressProjectResDto> inProgressProjectResDtos = new ArrayList<>();
+        for (Member member : members) {
+            Project project = member.getProject();
+            if(project.getFinishDate()!=null)
+                inProgressProjectResDtos.add(projectAssembler.inProgressProjectResDto(project));
+        }
+        return inProgressProjectResDtos;
     }
 }
