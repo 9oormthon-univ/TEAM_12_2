@@ -7,6 +7,7 @@ import com.letsRoll.letsRoll.Memoir.dto.req.MemoirAddReq;
 import com.letsRoll.letsRoll.Memoir.service.MemoirService;
 import com.letsRoll.letsRoll.Project.dto.ProjectAssembler;
 import com.letsRoll.letsRoll.Project.dto.req.ProjectStartReq;
+import com.letsRoll.letsRoll.Project.dto.res.FinishProjectResDto;
 import com.letsRoll.letsRoll.Project.dto.res.ProjectResDto;
 import com.letsRoll.letsRoll.Project.dto.res.InProgressProjectResDto;
 import com.letsRoll.letsRoll.Project.dto.res.StartProjectResDto;
@@ -74,5 +75,10 @@ public class ProjectController {
     @GetMapping("/myproject")
     public BaseResponse<List<InProgressProjectResDto>> myProjectList(@RequestBody @Valid UserIdReqDto userIdReqDto) {
         return new BaseResponse<>(projectService.myProjectList(userIdReqDto));
+    }
+
+    @GetMapping("/end")
+    public BaseResponse<List<FinishProjectResDto>> endProjectList(@RequestBody @Valid UserIdReqDto userIdReqDto) {
+        return new BaseResponse<>(projectService.endProjectList(userIdReqDto));
     }
 }
