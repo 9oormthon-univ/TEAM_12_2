@@ -3,14 +3,17 @@ package com.letsRoll.letsRoll.Project.controller;
 import com.letsRoll.letsRoll.Goal.dto.res.GoalResDto;
 import com.letsRoll.letsRoll.Member.dto.req.MemberAddReq;
 import com.letsRoll.letsRoll.Memoir.dto.req.MemoirAddReq;
-
 import com.letsRoll.letsRoll.Memoir.service.MemoirService;
 import com.letsRoll.letsRoll.Project.dto.ProjectAssembler;
 import com.letsRoll.letsRoll.Project.dto.req.ProjectStartReq;
+import com.letsRoll.letsRoll.Project.dto.res.FinishProjectResDto;
+import com.letsRoll.letsRoll.Project.dto.res.InProgressProjectResDto;
 import com.letsRoll.letsRoll.Project.dto.res.ProjectResDto;
+import com.letsRoll.letsRoll.Project.dto.res.StartProjectResDto;
 import com.letsRoll.letsRoll.Project.entity.Project;
 import com.letsRoll.letsRoll.Project.repository.ProjectRepository;
 import com.letsRoll.letsRoll.Project.service.ProjectService;
+import com.letsRoll.letsRoll.User.dto.req.UserIdReqDto;
 import com.letsRoll.letsRoll.global.common.BaseResponse;
 import com.letsRoll.letsRoll.global.exception.BaseException;
 import com.letsRoll.letsRoll.global.exception.BaseResponseCode;
@@ -27,11 +30,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProjectController {
     private final ProjectService projectService;
+    private final ProjectRepository projectRepository;
+    private final ProjectAssembler projectAssembler;
 
     @PostMapping //프로젝트 등록
-    public BaseResponse<Void> startProject(@RequestBody @Valid ProjectStartReq projectStartReq) {
-        projectService.startProject(projectStartReq);
-        return new BaseResponse<>(BaseResponseCode.SUCCESS);
+    public BaseResponse<StartProjectResDto> startProject(@RequestBody @Valid ProjectStartReq projectStartReq) {
+        return new BaseResponse<>(projectService.startProject(projectStartReq));
     }
 
     @GetMapping("/{projectId}")
@@ -39,6 +43,7 @@ public class ProjectController {
 
         return new BaseResponse<>(projectService.getProjectDetails(projectId, userId));
     }
+
 
 
     @GetMapping("/{projectId}/goals")
@@ -65,4 +70,13 @@ public class ProjectController {
         return new BaseResponse<>(BaseResponseCode.SUCCESS);
     }
 
+    @GetMapping("/myproject")
+    public BaseResponse<List<InProgressProjectResDto>> myProjectList(@RequestBody @Valid UserIdReqDto userIdReqDto) {
+        return new BaseResponse<>(projectService.myProjectList(userIdReqDto));
+    }
+
+    @GetMapping("/end")
+    public BaseResponse<List<FinishProjectResDto>> endProjectList(@RequestBody @Valid UserIdReqDto userIdReqDto) {
+        return new BaseResponse<>(projectService.endProjectList(userIdReqDto));
+    }
 }
